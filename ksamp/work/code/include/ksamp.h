@@ -18,3 +18,6 @@ int getCPUInfo(FILE*,char**);
 int getKernelInfo(FILE*,char**);
 int getUpTime(FILE*, long*);
 int getSupFs(FILE*,int*);
+int getBootTime (FILE*, char**, long segundos);
+int getCtxtChanges(FILE*,char**);
+int getProcesses(FILE* fp,char** buff);

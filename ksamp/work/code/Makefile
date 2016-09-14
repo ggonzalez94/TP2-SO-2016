@@ -5,8 +5,8 @@ CFLAGS=-c -Wall -pedantic
 
 all: ksamp
 
-ksamp: main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o
-	$(CC) main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o -o ksamp
+ksamp: main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o
+	$(CC) main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o -o ksamp
 
 main.o: src/main.c include/ksamp.h
 	$(CC) $(CFLAGS) src/main.c include/ksamp.h
@@ -25,6 +25,15 @@ getSupFs.o: src/getSupFs.c
 
 getUpTime.o: src/getUpTime.c
 	$(CC) $(CFLAGS) src/getUpTime.c
+
+getBootTime.o: src/getBootTime.c
+	$(CC) $(CFLAGS) src/getBootTime.c
+
+getCtxtChanges.o: src/getCtxtChanges.c
+	$(CC) $(CFLAGS) src/getCtxtChanges.c
+
+getProcesses.o: src/getProcesses.c
+	$(CC) $(CFLAGS) src/getProcesses.c	
 
 clean:
 	rm -rf *o ksamp
