@@ -14,8 +14,6 @@ int getUpTime(FILE* fp, long* tiempo){
 	getline(&line, &len, fp);
 	line = strtok(line," ");
 	*tiempo = atol(line);
-
-	printf("%ld\n",*tiempo );
 	
 	fclose(fp);
 

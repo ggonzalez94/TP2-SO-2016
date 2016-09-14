@@ -1,15 +1,15 @@
 #comentarios!
 
 CC=gcc
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -pedantic
 
 all: ksamp
 
 ksamp: main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o
 	$(CC) main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o -o ksamp
 
-main.o: src/main.c
-	$(CC) $(CFLAGS) src/main.c
+main.o: src/main.c include/ksamp.h
+	$(CC) $(CFLAGS) src/main.c include/ksamp.h
 
 getCPUInfo.o: src/getCPUInfo.c
 	$(CC) $(CFLAGS) src/getCPUInfo.c

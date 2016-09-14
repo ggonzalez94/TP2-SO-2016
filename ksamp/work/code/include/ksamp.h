@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define BUFFSIZE 256
 
 FILE *fp;
@@ -11,7 +12,6 @@ char buffer[BUFFSIZE];
 const long minute = 60;
 const long hour = 60 * 60;
 const long day = 60 * 60 * 24;
-
 
 int printHeader(FILE*,char []);
 int getCPUInfo(FILE*,char**);
