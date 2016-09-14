@@ -3,8 +3,11 @@
 #include <string.h>
 #include <sys/unistd.h>
 #include <time.h>
+#include <getopt.h>
 
 #include "../include/ksamp.h"
+
+void specialf(void);
 
 int main (int argc, char* argv[]){
 
@@ -24,15 +27,29 @@ int main (int argc, char* argv[]){
 	getSupFs(fp,&filesystems);
 	printf("El kernel soporta %i sistemas de archivos diferentes\n",filesystems);
 
-	// getBootTime(fp,&buff,segundos);
-	// printf("Fecha y hora de booteo: %s\n",buff);
 
-	// getCtxtChanges(fp,&buff);
-	// printf("Cantidad de cambios de contexto: %s\n",buff);
 
-	// getProcesses(fp,&buff);
-	// printf("Cantidad de procesos creados: %s\n",buff);
 
+
+	int opt= 0;
+	int special = -1;
+
+	//Specifying the expected options
+    //The two options l and b expect numbers as argument
+    static struct option long_options[] = {
+        {"stats",     no_argument,       0,  's' },
+        {0,           0,                 0,  0   }
+    };
+
+    int long_index =0;
+    while ((opt = getopt_long(argc, argv,"s", long_options, &long_index )) != -1) {
+        switch (opt) {
+             case 's' : specialf();
+                 break;
+             default: printf("Seleccione una opcion valida\n");
+                 // exit(EXIT_FAILURE);
+        }
+    }
 
 					//WIP Cantidad de tiempo de CPU utilizado para usuarios, sistema y proceso idle
 
@@ -71,5 +88,13 @@ int main (int argc, char* argv[]){
 }
 
 
+void specialf(void){
+	getBootTime(fp,&buff,segundos);
+	printf("\nFecha y hora de booteo: %s",buff);
 
+	getCtxtChanges(fp,&buff);
+	printf("Cantidad de cambios de contexto: %s",buff);
 
+	getProcesses(fp,&buff);
+	printf("Cantidad de procesos creados: %s\n",buff);
+}
