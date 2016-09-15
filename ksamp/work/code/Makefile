@@ -1,39 +1,45 @@
 #comentarios!
+#agregar -O2 a los flags!
 
 CC=gcc
 CFLAGS=-c -Wall -pedantic
+OBJECTS=main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o
+PATHOBJECTS=$(addprefix $(ODIR)/,$(OBJECTS))
+ODIR=obj
+LDIR=include
+SRCDIR=src
 
 all: ksamp
 
-ksamp: main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o
-	$(CC) main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o -o ksamp
+ksamp: $(OBJECTS)
+	$(CC) $(PATHOBJECTS) -o $@
 
-main.o: src/main.c include/ksamp.h
-	$(CC) $(CFLAGS) src/main.c include/ksamp.h
+main.o: $(SRCDIR)/main.c $(LDIR)/ksamp.h
+	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
 
-getCPUInfo.o: src/getCPUInfo.c
-	$(CC) $(CFLAGS) src/getCPUInfo.c
+getCPUInfo.o: $(SRCDIR)/getCPUInfo.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getKernelInfo.o: src/getKernelInfo.c
-	$(CC) $(CFLAGS) src/getKernelInfo.c
+getKernelInfo.o: $(SRCDIR)/getKernelInfo.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-printHeader.o: src/printHeader.c
-	$(CC) $(CFLAGS) src/printHeader.c
+printHeader.o: $(SRCDIR)/printHeader.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getSupFs.o: src/getSupFs.c
-	$(CC) $(CFLAGS) src/getSupFs.c
+getSupFs.o: $(SRCDIR)/getSupFs.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getUpTime.o: src/getUpTime.c
-	$(CC) $(CFLAGS) src/getUpTime.c
+getUpTime.o: $(SRCDIR)/getUpTime.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getBootTime.o: src/getBootTime.c
-	$(CC) $(CFLAGS) src/getBootTime.c
+getBootTime.o: $(SRCDIR)/getBootTime.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getCtxtChanges.o: src/getCtxtChanges.c
-	$(CC) $(CFLAGS) src/getCtxtChanges.c
+getCtxtChanges.o: $(SRCDIR)/getCtxtChanges.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getProcesses.o: src/getProcesses.c
-	$(CC) $(CFLAGS) src/getProcesses.c	
+getProcesses.o: $(SRCDIR)/getProcesses.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 clean:
-	rm -rf *o ksamp
+	rm -rf *o $(ODIR)/*.o ksamp $(LDIR)/*.gch

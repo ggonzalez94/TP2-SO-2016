@@ -13,8 +13,8 @@ int main (int argc, char* argv[]){
 
 	filesystems=0;
 	long* tiempo = &segundos;
-
 	printHeader(fp,buffer);
+	
 	getCPUInfo(fp,&buff);
 	printf("CPU: %s",buff);
 
@@ -27,25 +27,22 @@ int main (int argc, char* argv[]){
 	getSupFs(fp,&filesystems);
 	printf("El kernel soporta %i sistemas de archivos diferentes\n",filesystems);
 
-
-
-
-
 	int opt= 0;
-	int special = -1;
 
 	//Specifying the expected options
-    //The two options l and b expect numbers as argument
     static struct option long_options[] = {
         {"stats",     no_argument,       0,  's' },
+        {"prueba",	  required_argument, 0,	 'r' },
         {0,           0,                 0,  0   }
     };
 
     int long_index =0;
-    while ((opt = getopt_long(argc, argv,"s", long_options, &long_index )) != -1) {
+    while ((opt = getopt_long(argc, argv,"sr:", long_options, &long_index )) != -1) {
         switch (opt) {
              case 's' : specialf();
                  break;
+             case 'r' : printf("Opcion r con argumento %s\n",optarg);
+             	 break;
              default: printf("Seleccione una opcion valida\n");
                  // exit(EXIT_FAILURE);
         }
