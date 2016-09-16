@@ -1,7 +1,7 @@
 # TP1-SO-2016 
 
 ### Laboratorio 1 - Observando el Comportamiento de Linux - 2016 
-![enter image description here](https://t3.ftcdn.net/jpg/00/96/00/98/160_F_96009890_zdJu97gT4d6zoltOWyQXdbbzdkSi9Glz.jpg)
+![Icono](https://t3.ftcdn.net/jpg/00/96/00/98/160_F_96009890_zdJu97gT4d6zoltOWyQXdbbzdkSi9Glz.jpg)
 ___
 |Autores                               |
 |------------------------------------|
@@ -14,11 +14,18 @@ El programa KSamp permite inspeccionar información interna del Kernel de Linux,
 
 El software actualmente muestra:
 
- 1. El nombre del equipo donde se ejecuta, y la fecha y hora actual como mensaje de bienvenida.
- 2. El tipo y modelo de CPU, y su velocidad de clock en MHz
- 3. La versión del Kernel de Linux del sistema
- 4. El tiempo que ha estado encendido el equipo (D hh:mm:ss)
- 5. La cantidad de sistemas de archivos diferentes que soporta el Kernel
+ - El nombre del equipo donde se ejecuta, y la fecha y hora actual como mensaje de bienvenida.
+ - El tipo y modelo de CPU, y su velocidad de clock en MHz
+ - La versión del Kernel de Linux del sistema
+ - El tiempo que ha estado encendido el equipo (D hh:mm:ss)
+ - La cantidad de sistemas de archivos diferentes que soporta el Kernel
+
+Además, acepta parámetros para visualizar información adicional:
+
+ - Cantidad de tiempo de CPU utilizado para usuarios, sistema y proceso idle.
+ - Cantidad de cambios de contexto.
+ - Fecha y hora cuando el sistema fue iniciado
+ - Número de procesos creados desde el inicio del sistema
 
 ## 2. Instrucciones de instalación
 ---
@@ -34,9 +41,14 @@ El software actualmente muestra:
 % make
 ```
  
- - Una vez terminado, para visualizar en consola la información, ejecute el comando 
+ - Una vez terminado, para visualizar en consola la información, ejecute el comando: 
 
 
 ```
 % ./ksamp
+```
+- Además, puede ejecutar uno de los siguientes comandos para visualizar información adicional:
+```
+% ./ksamp -s
+% ./ksamp -stats
 ```
