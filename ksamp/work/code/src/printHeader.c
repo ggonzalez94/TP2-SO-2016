@@ -5,7 +5,10 @@
 
 int printHeader(FILE* fp,char buffer[]){
 
-	fp = fopen("/proc/sys/kernel/hostname","r"); 
+	fp = fopen("/proc/sys/kernel/hostname","r");
+	if (fp == NULL){
+		return 1;
+	} 
 	fgets(buffer, 256+1, fp); 
 	fclose(fp);
 	printf("Hostname: %s",buffer);
