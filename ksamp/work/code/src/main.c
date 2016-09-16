@@ -11,7 +11,9 @@ void specialf(void);
 
 int main (int argc, char* argv[]){
 
-
+	getMemoria(fp,memoria);
+	printf("%s\n","Mostrando memoria test" );
+	printf("%i, %i\n",memoria[0],memoria[1]);
 
 	filesystems=0;
 	long* tiempo = &segundos;
