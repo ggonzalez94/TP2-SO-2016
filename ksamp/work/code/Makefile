@@ -9,10 +9,13 @@ ODIR=obj
 LDIR=include
 SRCDIR=src
 
-all: ksamp
+all: ksamp cppcheck
 
 ksamp: $(OBJECTS)
 	$(CC) $(PATHOBJECTS) -o $@
+
+cppcheck:
+	cppcheck ../code
 
 main.o: $(SRCDIR)/main.c $(LDIR)/ksamp.h
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
