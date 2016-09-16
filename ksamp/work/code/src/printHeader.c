@@ -5,6 +5,7 @@
 
 int printHeader(FILE* fp,char buffer[]){
 
+	printf("\nBienvenido a ksamp!\n");
 	fp = fopen("/proc/sys/kernel/hostname","r");
 	if (fp == NULL){
 		return 1;

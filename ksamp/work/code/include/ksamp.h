@@ -25,3 +25,5 @@ int getCtxtChanges(FILE*,char**);
 int getProcesses(FILE* fp,char** buff);
 int getCPUTime(FILE *fp,int[]);
 int getMemoria(FILE *fp,int[]);
+void stats(void);
+void printHelp();
