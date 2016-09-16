@@ -13,8 +13,46 @@ int main (int argc, char* argv[]){
 	printf("%s\n","Mostrando memoria test" );
 	printf("%i, %i\n",memoria[0],memoria[1]);
 
-	filesystems=0;
-	long* tiempo = &segundos;
+	int opt= 0;
+
+	int helpflag = 0, statsflag = 0, intervalflag = 0;
+
+
+    static struct option long_options[] = {
+        {"stats",     no_argument,       0,  's' },
+        {"interval",  required_argument, 0,	 'l' },
+        {"help",      no_argument,       0,  'h' },
+        {0,           0,                 0,  0   }
+    };
+
+    int long_index =0;
+    while ((opt = getopt_long(argc, argv,"sl:h", long_options, &long_index )) != -1) {
+        switch (opt) {
+             case 's' : statsflag=1;
+                 break;
+             case 'l' : printf("Opcion l con argumento %s\n",optarg);
+             	 break;
+             case 'h' : helpflag=1;
+             	 break;
+             default: printf("Seleccione una opcion valida\n");
+                 exit(EXIT_FAILURE);
+        }
+    }
+
+    if(helpflag) {
+    	printHelp();
+    	return 0;
+    }
+
+    tiempo = &segundos;
+    printMainProgram();
+
+    if(statsflag) stats();
+
+	return 0;
+}
+
+void printMainProgram(){
 	printHeader(fp,buffer);
 	
 	getCPUInfo(fp,&buff);
@@ -28,31 +66,6 @@ int main (int argc, char* argv[]){
 
 	getSupFs(fp,&filesystems);
 	printf("El kernel soporta %i sistemas de archivos diferentes\n",filesystems);
-
-	int opt= 0;
-
-	//Specifying the expected options
-    static struct option long_options[] = {
-        {"stats",     no_argument,       0,  's' },
-        {"interval",  required_argument, 0,	 'l' },
-        {"help",      no_argument,       0,  'h' },
-        {0,           0,                 0,  0   }
-    };
-
-    int long_index =0;
-    while ((opt = getopt_long(argc, argv,"sr:h", long_options, &long_index )) != -1) {
-        switch (opt) {
-             case 's' : stats();
-                 break;
-             case 'r' : printf("Opcion r con argumento %s\n",optarg);
-             	 break;
-             case 'h' : printHelp();
-             	 break;
-             default: printf("Seleccione una opcion valida\n");
-                 // exit(EXIT_FAILURE);
-        }
-    }
-	return 0;
 }
 
 
@@ -76,5 +89,5 @@ void stats(void){
 
 void printHelp(){
 
-	printf("Mensaje de ayuda del programa Ksamp\n");
+	printf("\nMensaje de ayuda del programa Ksamp\n");
 }

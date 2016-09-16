@@ -3,7 +3,7 @@
 
 FILE *fp;
 char * buff;
-int filesystems;
+int filesystems = 0;
 long* tiempo;
 long segundos;
 int CPU_times[3];
@@ -26,4 +26,5 @@ int getProcesses(FILE* fp,char** buff);
 int getCPUTime(FILE *fp,int[]);
 int getMemoria(FILE *fp,int[]);
 void stats(void);
-void printHelp();
+void printHelp(void);
+void printMainProgram(void);
