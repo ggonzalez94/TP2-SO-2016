@@ -23,3 +23,5 @@ int getBootTime (FILE*, char**, long segundos);
 int getCtxtChanges(FILE*,char**);
 int getProcesses(FILE* fp,char** buff);
 int getCPUTime(FILE *fp,int[]);
+void stats(void);
+void printHelp();
