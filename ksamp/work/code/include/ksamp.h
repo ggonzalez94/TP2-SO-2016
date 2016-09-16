@@ -6,6 +6,7 @@ char * buff;
 int filesystems;
 long* tiempo;
 long segundos;
+int CPU_times[3];
 
 char buffer[BUFFSIZE];
 
@@ -21,3 +22,4 @@ int getSupFs(FILE*,int*);
 int getBootTime (FILE*, char**, long segundos);
 int getCtxtChanges(FILE*,char**);
 int getProcesses(FILE* fp,char** buff);
+int getCPUTime(FILE *fp,int[]);

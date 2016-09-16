@@ -11,6 +11,8 @@ void specialf(void);
 
 int main (int argc, char* argv[]){
 
+
+
 	filesystems=0;
 	long* tiempo = &segundos;
 	printHeader(fp,buffer);
@@ -47,45 +49,17 @@ int main (int argc, char* argv[]){
                  // exit(EXIT_FAILURE);
         }
     }
-
-					//WIP Cantidad de tiempo de CPU utilizado para usuarios, sistema y proceso idle
-
-					// char *line = NULL;
-					// size_t len = 0;
-
-					// fp = fopen("/proc/stat", "r");
-					// if (fp == NULL)
-					// 	return 1;
-					
-					// getline(&line, &len, fp);
-
-					// 	// buff = strtok(line,"cpu");
-					// 	// if(buff != NULL){
-					// 	// 	buff = strstr(buff," ")+1;
-					// 	// }
-
-					// buff = strtok(line," ");
-
-					// for(int i=0; i<4; i++){
-
-					// }
-
-					// while(buff != NULL){
-					// 	printf("%s\n",buff);
-					// 	buff = strtok(NULL," ");
-					// }
-
-					
-					// // printf("%s\n",buff);
-
-					// free(line);
-					// fclose(fp);
-	
 	return 0;
 }
 
 
 void specialf(void){
+
+    getCPUTime(fp,CPU_times);
+   	printf("Cantidad de tiempo CPU usada para usuario: %i\n", CPU_times[0]);
+   	printf("Cantidad de tiempo CPU usado por el sistema: %i\n", CPU_times[1]);
+   	printf("Cantidad de tiempo en idle: %i\n", CPU_times[2]);
+
 	getBootTime(fp,&buff,segundos);
 	printf("\nFecha y hora de booteo: %s",buff);
 

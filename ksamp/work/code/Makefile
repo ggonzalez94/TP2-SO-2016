@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-c -Wall -pedantic
-OBJECTS=main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o
+OBJECTS=main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o getCPUTime.o
 PATHOBJECTS=$(addprefix $(ODIR)/,$(OBJECTS))
 ODIR=obj
 LDIR=include
@@ -39,6 +39,9 @@ getCtxtChanges.o: $(SRCDIR)/getCtxtChanges.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 getProcesses.o: $(SRCDIR)/getProcesses.c
+	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
+
+getCPUTime.o: $(SRCDIR)/getCPUTime.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 clean:
