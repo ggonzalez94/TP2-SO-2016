@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-c -Wall -pedantic
-OBJECTS=main.o getCPUInfo.o getKernelInfo.o printHeader.o getSupFs.o getUpTime.o getBootTime.o getCtxtChanges.o getProcesses.o getCPUTime.o getMemoria.o
+OBJECTS=main.o printHeader.o getSupFs.o getUpTime.o getBootTime.o parseFile.o
 PATHOBJECTS=$(addprefix $(ODIR)/,$(OBJECTS))
 ODIR=obj
 LDIR=include
@@ -20,12 +20,6 @@ cppcheck:
 main.o: $(SRCDIR)/main.c $(LDIR)/ksamp.h
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
 
-getCPUInfo.o: $(SRCDIR)/getCPUInfo.c
-	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
-
-getKernelInfo.o: $(SRCDIR)/getKernelInfo.c
-	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
-
 printHeader.o: $(SRCDIR)/printHeader.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
@@ -38,16 +32,7 @@ getUpTime.o: $(SRCDIR)/getUpTime.c
 getBootTime.o: $(SRCDIR)/getBootTime.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-getCtxtChanges.o: $(SRCDIR)/getCtxtChanges.c
-	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
-
-getProcesses.o: $(SRCDIR)/getProcesses.c
-	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
-
-getCPUTime.o: $(SRCDIR)/getCPUTime.c
-	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
-
-getMemoria.o: $(SRCDIR)/getMemoria.c
+parseFile.o: $(SRCDIR)/parseFile.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 clean:

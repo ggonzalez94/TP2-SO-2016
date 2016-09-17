@@ -3,13 +3,16 @@
 
 FILE *fp;
 char * buff;
-int filesystems = 0;
+int filesystems;
 long* tiempo;
 long segundos;
 int CPU_times[3];
 int memoria[2];
 
 char buffer[BUFFSIZE];
+char path[32];
+char before[32];
+char after[32];
 
 const long minute = 60;
 const long hour = 60 * 60;
@@ -28,3 +31,4 @@ int getMemoria(FILE *fp,int[]);
 void stats(void);
 void printHelp(void);
 void printMainProgram(void);
+int parseFile(FILE* fp, char path[], char before[], char after[], char** buff);

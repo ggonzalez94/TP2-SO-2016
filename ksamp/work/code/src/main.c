@@ -7,16 +7,13 @@
 
 #include "../include/ksamp.h"
 
+void printInterval(int[]);
+
 int main (int argc, char* argv[]){
 
-	getMemoria(fp,memoria);
-	printf("%s\n","Mostrando memoria test" );
-	printf("%i, %i\n",memoria[0],memoria[1]);
-
 	int opt= 0;
-
-	int helpflag = 0, statsflag = 0, intervalflag = 0;
-
+	int flag = 0;
+	int intervals[2];
 
     static struct option long_options[] = {
         {"stats",     no_argument,       0,  's' },
@@ -28,38 +25,52 @@ int main (int argc, char* argv[]){
     int long_index =0;
     while ((opt = getopt_long(argc, argv,"sl:h", long_options, &long_index )) != -1) {
         switch (opt) {
-             case 's' : statsflag=1;
+             case 's' : flag=1;
                  break;
-             case 'l' : printf("Opcion l con argumento %s\n",optarg);
+             case 'l' : flag=2;
+             			intervals[0] = atoi(optarg);
+             			intervals[1] = atoi(optarg + strlen(optarg)+1);
              	 break;
-             case 'h' : helpflag=1;
+             case 'h' : flag=3;
              	 break;
              default: printf("Seleccione una opcion valida\n");
                  exit(EXIT_FAILURE);
         }
     }
 
-    if(helpflag) {
+    if(flag==3) {
     	printHelp();
     	return 0;
     }
 
+    filesystems = 0;
     tiempo = &segundos;
     printMainProgram();
 
-    if(statsflag) stats();
+    if(flag==1) stats();
+
+    if(flag==2){
+    	stats();
+    	printInterval(intervals);
+    }
 
 	return 0;
 }
 
 void printMainProgram(){
 	printHeader(fp,buffer);
-	
-	getCPUInfo(fp,&buff);
-	printf("CPU: %s",buff);
 
-	getKernelInfo(fp,&buff);
-	printf("Version del Kernel de Linux: %s\n",buff);
+	strcpy(path,"/proc/cpuinfo");
+    strcpy(before,"model name	: ");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+    printf("CPU :%s",buff);
+
+    strcpy(path,"/proc/version");
+    strcpy(before,"version ");
+    strcpy(after,"(");
+    parseFile(fp,path,before,after,&buff);
+    printf("Version del Kernel de Linux: %s\n",buff);
 
 	getUpTime(fp,tiempo);
 	printf("Uptime: %ldD %ld:%02ld:%02ld \n",segundos/day, (segundos%day)/hour,(segundos%hour)/minute,segundos%minute);
@@ -72,19 +83,60 @@ void printMainProgram(){
 void stats(void){
 
 	printf("\nInformacion adicional:\n");
-    getCPUTime(fp,CPU_times);
-   	printf("Cantidad de tiempo CPU usada para usuario: %i\n", CPU_times[0]);
+
+   	strcpy(path,"/proc/stat");
+    strcpy(before,"cpu");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+
+	buff = strstr(buff," ") + strlen(" ")+1;
+	strcpy(buffer,strtok(buff," "));
+
+	int j = 0;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if(i==0 | i==2 | i==3){
+			CPU_times[j] = atoi(buffer);
+			j++;
+		}
+		strcpy(buffer,strtok(NULL," "));	
+	}
+
+	printf("Cantidad de tiempo CPU usada para usuario: %i\n", CPU_times[0]);
    	printf("Cantidad de tiempo CPU usado por el sistema: %i\n", CPU_times[1]);
    	printf("Cantidad de tiempo en idle: %i\n", CPU_times[2]);
 
 	getBootTime(fp,&buff,segundos);
 	printf("Fecha y hora de booteo: %s",buff);
 
-	getCtxtChanges(fp,&buff);
-	printf("Cantidad de cambios de contexto: %s",buff);
+    strcpy(path,"/proc/stat");
+    strcpy(before,"ctxt ");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+    printf("Cantidad de cambios de contexto: %s\n",buff);
 
-	getProcesses(fp,&buff);
-	printf("Cantidad de procesos creados: %s",buff);
+	strcpy(path,"/proc/stat");
+    strcpy(before,"processes ");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+    printf("Cantidad de procesos creados: %s",buff);
+
+	// getMemoria(fp,memoria);
+	strcpy(path,"/proc/meminfo");
+    strcpy(before,"MemTotal:");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+    memoria[0] = atoi(buff);
+    strcpy(before,"MemFree:");
+    parseFile(fp,path,before,after,&buff);
+    memoria[1] = atoi(buff);
+	printf("Memoria disponible/total %i/%i\n",memoria[1],memoria[0]);
+}
+
+void printInterval(int intervals[]){
+	printf("%i\n",intervals[0]);
+	printf("%i\n",intervals[1]);
 }
 
 void printHelp(){
