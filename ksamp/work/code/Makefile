@@ -15,7 +15,7 @@ ksamp: $(OBJECTS)
 	$(CC) $(PATHOBJECTS) -o $@
 
 cppcheck:
-	cppcheck ../code
+	cppcheck . 2> err.txt
 
 main.o: $(SRCDIR)/main.c $(LDIR)/ksamp.h
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
@@ -33,4 +33,4 @@ parseFile.o: $(SRCDIR)/parseFile.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 clean:
-	rm -rf *o $(ODIR)/*.o ksamp $(LDIR)/*.gch
+	rm -rf *o $(ODIR)/*.o ksamp $(LDIR)/*.gch err.txt

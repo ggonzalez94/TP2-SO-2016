@@ -101,7 +101,7 @@ void stats(void){
 
 	for (int i = 0; i < 4; ++i)
 	{
-		if(i==0 | i==2 | i==3){
+		if((i==0) | (i==2) | (i==3)){
 			CPU_times[j] = atoi(buffer);
 			j++;
 		}
