@@ -8,7 +8,8 @@
 
 #include "../include/ksamp.h"
 
-void printInterval(int[]);
+void calculateInterval(int[], double values[]);
+void printIntervals (double values[]);
 
 int main (int argc, char* argv[]){
 
@@ -56,7 +57,19 @@ int main (int argc, char* argv[]){
 
     if(flag==2){
     	stats();
-    	printInterval(intervals);
+
+    	do{
+    		calculateInterval(intervals,values);
+    		printf("\nMas informacion adicional. Refresco cada %i segundos\n",intervals[0]);
+			printIntervals(values);
+    		intervals[1] -= intervals[0];
+			fflush(stdout);
+			sleep(intervals[0]);
+
+			if(intervals[0] > intervals[1]) break; //si estoy en la ultima vuelta, no subo renglones sino que salgo
+			for(int lineas = 0; lineas < 7; lineas++) printf("\x1B[A");  //subo una linea
+
+    	}while(intervals[0]<=intervals[1]);
     }
 
 	return 0;
@@ -133,62 +146,51 @@ void stats(void){
     printf("Cantidad de procesos creados: %s",buff);
 }
 
-void printInterval(int intervals[]){
+void calculateInterval(int intervals[], double values[]){
 
-	do{
-		printf("\nMas informacion adicional. Refresco cada %i segundos\n",intervals[0]);
+	strcpy(path,"/proc/diskstats");
+    strcpy(before,"sda");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
 
-		strcpy(path,"/proc/diskstats");
-	    strcpy(before,"sda");
-	    strcpy(after,"");
-	    parseFile(fp,path,before,after,&buff);
+	buff = strstr(buff," ") + strlen(" ");	
+	strcpy(buffer,strtok(buff," "));
 
-		buff = strstr(buff," ") + strlen(" ");	
-		strcpy(buffer,strtok(buff," "));
+	int j = 0;
 
-		int j = 0;
-
-		for (int i = 0; i < 5; ++i)
-		{
-			if((i==0) | (i==4)){
-				diskstats[j] = atoi(buffer);
-				j++;
-			}
-			strcpy(buffer,strtok(NULL," "));	
+	for (int i = 0; i < 5; ++i)
+	{
+		if((i==0) | (i==4)){
+			values[j] = atof(buffer);
+			j++;
 		}
+		strcpy(buffer,strtok(NULL," "));	
+	}
 
-		diskstats[2] = diskstats[0]+diskstats[1];
+	values[2] = values[0]+values[1];
 
-		printf("Numero de peticiones al disco realizadas: %i\n",diskstats[2]);
-		printf("Numero de lecturas realizadas: %i\n",diskstats[0]);
-		printf("Numero de escrituras realizadas: %i\n",diskstats[1]);
+	strcpy(path,"/proc/meminfo");
+    strcpy(before,"MemTotal:");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+    values[3] = atof(buff);
+    strcpy(before,"MemFree:");
+    parseFile(fp,path,before,after,&buff);
+    values[4] = atof(buff);
 
-		strcpy(path,"/proc/meminfo");
-	    strcpy(before,"MemTotal:");
-	    strcpy(after,"");
-	    parseFile(fp,path,before,after,&buff);
-	    memoria[0] = atoi(buff);
-	    strcpy(before,"MemFree:");
-	    parseFile(fp,path,before,after,&buff);
-	    memoria[1] = atoi(buff);
-		printf("Memoria disponible/total %i KB/%i KB\n",memoria[1],memoria[0]);
+	strcpy(path,"/proc/loadavg");
+    strcpy(before,"");
+    strcpy(after," ");
+    parseFile(fp,path,before,after,&buff);
+    values[5] = atof(buff);
+}
 
-		strcpy(path,"/proc/loadavg");
-	    strcpy(before,"");
-	    strcpy(after," ");
-	    parseFile(fp,path,before,after,&buff);
-	    printf("Promedio de carga del sistema en el ultimo minuto: %s\n",buff);
-
-		intervals[1] = intervals[1] - intervals[0];
-		fflush(stdout);
-		sleep(intervals[0]);
-
-		if(intervals[0] > intervals[1]) break; //si estoy en la ultima vuelta, no subo renglones sino que salgo
-
-		for(int lineas = 0; lineas < 7; lineas++){
-			printf("\x1B[A");  //subo una linea
-		}
-    }while(intervals[0]<=intervals[1]);
+void printIntervals(double values[]){
+		printf("Numero de peticiones al disco realizadas: %.0f\n",values[2]);
+		printf("Numero de lecturas realizadas: %.0f\n",values[0]);
+		printf("Numero de escrituras realizadas: %.0f\n",values[1]);
+		printf("Memoria disponible/total %.0f KB/%.0f KB\n",values[4],values[3]);
+	    printf("Promedio de carga del sistema en el ultimo minuto: %.2f\n",values[5]);
 }
 
 void printHelp(){

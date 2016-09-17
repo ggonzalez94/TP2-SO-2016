@@ -15,6 +15,9 @@ char path[32];
 char before[32];
 char after[32];
 
+double values[6];
+double difference[6];
+
 const long minute = 60;
 const long hour = 60 * 60;
 const long day = 60 * 60 * 24;
