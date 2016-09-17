@@ -26,3 +26,4 @@ void stats(void);
 void printHelp(void);
 void printMainProgram(void);
 int parseFile(FILE* fp, char path[], char before[], char after[], char** buff);
+void verificarInput(int);

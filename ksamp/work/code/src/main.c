@@ -25,15 +25,19 @@ int main (int argc, char* argv[]){
     int long_index =0;
     while ((opt = getopt_long(argc, argv,"sl:h", long_options, &long_index )) != -1) {
         switch (opt) {
-             case 's' : flag=1;
+             case 's' : verificarInput(flag);
+             			flag=1;
                  break;
-             case 'l' : flag=2;
+             case 'l' : verificarInput(flag);
+             			flag=2;
              			intervals[0] = atoi(optarg);
              			intervals[1] = atoi(optarg + strlen(optarg)+1);
              	 break;
-             case 'h' : flag=3;
+             case 'h' : verificarInput(flag);
+             			flag=3;
              	 break;
-             default: printf("Seleccione una opcion valida\n");
+             default: printf("Por favor seleccione una opcion valida\n");
+             		  printf("Ingrese la opcion --help o -h para obtener ayuda\n");	
                  exit(EXIT_FAILURE);
         }
     }
@@ -179,6 +183,14 @@ void printInterval(int intervals[]){
 void printHelp(){
 	printf("Mensaje de ayuda del programa Ksamp\n");
 	printf("-s, --sats               Para obtener mas estadisticas de uso del sistema\n");
-	printf("-l, --interval x y       Para lo anterior, y ademas estadisticas actualizadas\n");
+	printf("-l, --interval x y       Abarca lo anterior, y ademas estadisticas actualizadas\n");
 	printf("                         cada 'x' segundos durante 'y' segundos\n");
+}
+
+void verificarInput(int flag){
+	if(flag != 0) { //si el comando ingresado no es correcto
+		printf("Por favor seleccione una opcion valida\n");
+		printf("Ingrese la opcion --help o -h para obtener ayuda\n");
+		exit(EXIT_FAILURE);
+	}
 }
