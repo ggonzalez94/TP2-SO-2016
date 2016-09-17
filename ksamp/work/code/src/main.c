@@ -4,6 +4,7 @@
 #include <sys/unistd.h>
 #include <time.h>
 #include <getopt.h>
+#include <unistd.h>
 
 #include "../include/ksamp.h"
 
@@ -134,50 +135,61 @@ void stats(void){
 
 void printInterval(int intervals[]){
 
-	printf("\nMas informacion adicional:\n");
-	printf("%i\n",intervals[0]);
-	printf("%i\n",intervals[1]);
+	for (int k = 0; k < intervals[1]; k+intervals[0]){
 
-	strcpy(path,"/proc/diskstats");
-    strcpy(before,"sda");
-    strcpy(after,"");
-    parseFile(fp,path,before,after,&buff);
+		printf("\nMas informacion adicional. Refresco cada %i segundos\n",intervals[0]);
 
-	buff = strstr(buff," ") + strlen(" ");	
-	strcpy(buffer,strtok(buff," "));
+		strcpy(path,"/proc/diskstats");
+	    strcpy(before,"sda");
+	    strcpy(after,"");
+	    parseFile(fp,path,before,after,&buff);
 
-	int j = 0;
+		buff = strstr(buff," ") + strlen(" ");	
+		strcpy(buffer,strtok(buff," "));
 
-	for (int i = 0; i < 5; ++i)
-	{
-		if((i==0) | (i==4)){
-			diskstats[j] = atoi(buffer);
-			j++;
+		int j = 0;
+
+		for (int i = 0; i < 5; ++i)
+		{
+			if((i==0) | (i==4)){
+				diskstats[j] = atoi(buffer);
+				j++;
+			}
+			strcpy(buffer,strtok(NULL," "));	
 		}
-		strcpy(buffer,strtok(NULL," "));	
-	}
 
-	diskstats[2] = diskstats[0]+diskstats[1];
+		diskstats[2] = diskstats[0]+diskstats[1];
 
-	printf("Numero de peticiones al disco realizadas: %i\n",diskstats[2]);
-	printf("Numero de lecturas realizadas: %i\n",diskstats[0]);
-	printf("Numero de escrituras realizadas: %i\n",diskstats[1]);
+		printf("Numero de peticiones al disco realizadas: %i\n",diskstats[2]);
+		printf("Numero de lecturas realizadas: %i\n",diskstats[0]);
+		printf("Numero de escrituras realizadas: %i\n",diskstats[1]);
 
-	strcpy(path,"/proc/meminfo");
-    strcpy(before,"MemTotal:");
-    strcpy(after,"");
-    parseFile(fp,path,before,after,&buff);
-    memoria[0] = atoi(buff);
-    strcpy(before,"MemFree:");
-    parseFile(fp,path,before,after,&buff);
-    memoria[1] = atoi(buff);
-	printf("Memoria disponible/total %i/%i\n",memoria[1],memoria[0]);
+		strcpy(path,"/proc/meminfo");
+	    strcpy(before,"MemTotal:");
+	    strcpy(after,"");
+	    parseFile(fp,path,before,after,&buff);
+	    memoria[0] = atoi(buff);
+	    strcpy(before,"MemFree:");
+	    parseFile(fp,path,before,after,&buff);
+	    memoria[1] = atoi(buff);
+		printf("Memoria disponible/total %i/%i\n",memoria[1],memoria[0]);
 
-	strcpy(path,"/proc/loadavg");
-    strcpy(before,"");
-    strcpy(after," ");
-    parseFile(fp,path,before,after,&buff);
-    printf("Promedio de carga del sistema en el ultimo minuto: %s\n",buff);
+		strcpy(path,"/proc/loadavg");
+	    strcpy(before,"");
+	    strcpy(after," ");
+	    parseFile(fp,path,before,after,&buff);
+	    printf("Promedio de carga del sistema en el ultimo minuto: %s\n",buff);
+
+		intervals[1]-=intervals[0];
+		fflush(stdout);
+		sleep(intervals[0]);
+
+		if(k >= intervals[1]) break; //si estoy en la ultima vuelta, no subo renglones sino que salgo
+
+		for(int lineas = 0; lineas < 7; lineas++){
+			printf("\x1B[A");  /* move up one line */
+		}
+    }
 }
 
 void printHelp(){
