@@ -63,6 +63,8 @@ Además, permite mostrar información actualizada cada cierto tiempo, para tener
 % ./ksamp -l 'PARAM1' 'PARAM2'
 % ./ksamp -interval 'PARAM1' 'PARAM2'
 ```
+Donde ```PARAM1``` y ```PARAM2``` son el tiempo de refresco de la informacion, y el tiempo total que se quiere monitorear.
+
  - Para obtener ayuda, ejecute:
 ```
 % ./ksamp -h
