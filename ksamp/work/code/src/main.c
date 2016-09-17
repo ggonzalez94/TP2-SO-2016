@@ -135,8 +135,7 @@ void stats(void){
 
 void printInterval(int intervals[]){
 
-	for (int k = 0; k < intervals[1]; k+intervals[0]){
-
+	do{
 		printf("\nMas informacion adicional. Refresco cada %i segundos\n",intervals[0]);
 
 		strcpy(path,"/proc/diskstats");
@@ -172,7 +171,7 @@ void printInterval(int intervals[]){
 	    strcpy(before,"MemFree:");
 	    parseFile(fp,path,before,after,&buff);
 	    memoria[1] = atoi(buff);
-		printf("Memoria disponible/total %i/%i\n",memoria[1],memoria[0]);
+		printf("Memoria disponible/total %i KB/%i KB\n",memoria[1],memoria[0]);
 
 		strcpy(path,"/proc/loadavg");
 	    strcpy(before,"");
@@ -180,22 +179,22 @@ void printInterval(int intervals[]){
 	    parseFile(fp,path,before,after,&buff);
 	    printf("Promedio de carga del sistema en el ultimo minuto: %s\n",buff);
 
-		intervals[1]-=intervals[0];
+		intervals[1] = intervals[1] - intervals[0];
 		fflush(stdout);
 		sleep(intervals[0]);
 
-		if(k >= intervals[1]) break; //si estoy en la ultima vuelta, no subo renglones sino que salgo
+		if(intervals[0] > intervals[1]) break; //si estoy en la ultima vuelta, no subo renglones sino que salgo
 
-		for(int lineas = 0; lineas < 7; lineas++){
-			printf("\x1B[A");  /* move up one line */
+		for(int lineas = 0; lineas < 8; lineas++){
+			printf("\x1B[A");  //subo una linea
 		}
-    }
+    }while(intervals[0]<=intervals[1]);
 }
 
 void printHelp(){
 	printf("Mensaje de ayuda del programa Ksamp\n");
 	printf("-s, --sats               Para obtener mas estadisticas de uso del sistema\n");
-	printf("-l, --interval x y       Abarca lo anterior, y ademas estadisticas actualizadas\n");
+	printf("-l, --interval x y       Abarca lo anterior, y ademas actualiza las estadisticas\n");
 	printf("                         cada 'x' segundos durante 'y' segundos\n");
 }
 
