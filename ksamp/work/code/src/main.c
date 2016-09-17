@@ -185,7 +185,7 @@ void printInterval(int intervals[]){
 
 		if(intervals[0] > intervals[1]) break; //si estoy en la ultima vuelta, no subo renglones sino que salgo
 
-		for(int lineas = 0; lineas < 8; lineas++){
+		for(int lineas = 0; lineas < 7; lineas++){
 			printf("\x1B[A");  //subo una linea
 		}
     }while(intervals[0]<=intervals[1]);
