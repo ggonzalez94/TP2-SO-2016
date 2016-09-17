@@ -177,6 +177,8 @@ void printInterval(int intervals[]){
 }
 
 void printHelp(){
-
-	printf("\nMensaje de ayuda del programa Ksamp\n");
+	printf("Mensaje de ayuda del programa Ksamp\n");
+	printf("-s, --sats               Para obtener mas estadisticas de uso del sistema\n");
+	printf("-l, --interval x y       Para lo anterior, y ademas estadisticas actualizadas\n");
+	printf("                         cada 'x' segundos durante 'y' segundos\n");
 }
