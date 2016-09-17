@@ -12,7 +12,7 @@ int printHeader(FILE* fp,char buffer[]){
 	if (fp == NULL){
 		return 1;
 	} 
-	fgets(buffer, 256, fp); 
+	buffer = fgets(buffer, 256, fp); 
 	fclose(fp);
 	printf("Hostname: %s",buffer);
 
@@ -21,9 +21,9 @@ int printHeader(FILE* fp,char buffer[]){
 		return 1;
 	} 
 	
-	fgets(buffer, 100, fp);
+	buffer = fgets(buffer, 100, fp);
 	strcpy(hora,buffer+11);
-	fgets(buffer, 100, fp);
+	buffer = fgets(buffer, 100, fp);
 	strcpy(fecha,buffer+11);
 
 	hora[strcspn(hora, "\n")] = 0;
