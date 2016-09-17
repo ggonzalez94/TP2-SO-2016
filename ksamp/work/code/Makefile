@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-c -Wall -pedantic
-OBJECTS=main.o printHeader.o getSupFs.o getUpTime.o getBootTime.o parseFile.o
+OBJECTS=main.o printHeader.o getSupFs.o getBootTime.o parseFile.o
 PATHOBJECTS=$(addprefix $(ODIR)/,$(OBJECTS))
 ODIR=obj
 LDIR=include
@@ -24,9 +24,6 @@ printHeader.o: $(SRCDIR)/printHeader.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 getSupFs.o: $(SRCDIR)/getSupFs.c
-	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
-
-getUpTime.o: $(SRCDIR)/getUpTime.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 getBootTime.o: $(SRCDIR)/getBootTime.c

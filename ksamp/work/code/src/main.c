@@ -72,7 +72,12 @@ void printMainProgram(){
     parseFile(fp,path,before,after,&buff);
     printf("Version del Kernel de Linux: %s\n",buff);
 
-	getUpTime(fp,tiempo);
+    strcpy(path,"/proc/uptime");
+    strcpy(before," ");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+
+	*tiempo = atol(buff);
 	printf("Uptime: %ldD %ld:%02ld:%02ld \n",segundos/day, (segundos%day)/hour,(segundos%hour)/minute,segundos%minute);
 
 	getSupFs(fp,&filesystems);
