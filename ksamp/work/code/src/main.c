@@ -119,15 +119,46 @@ void stats(void){
     strcpy(before,"ctxt ");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
-    printf("Cantidad de cambios de contexto: %s\n",buff);
+    printf("Cantidad de cambios de contexto: %s",buff);
 
 	strcpy(path,"/proc/stat");
     strcpy(before,"processes ");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
     printf("Cantidad de procesos creados: %s",buff);
+}
 
-	// getMemoria(fp,memoria);
+void printInterval(int intervals[]){
+
+	printf("\nMas informacion adicional:\n");
+	printf("%i\n",intervals[0]);
+	printf("%i\n",intervals[1]);
+
+	strcpy(path,"/proc/diskstats");
+    strcpy(before,"sda");
+    strcpy(after,"");
+    parseFile(fp,path,before,after,&buff);
+
+	buff = strstr(buff," ") + strlen(" ");	
+	strcpy(buffer,strtok(buff," "));
+
+	int j = 0;
+
+	for (int i = 0; i < 5; ++i)
+	{
+		if((i==0) | (i==4)){
+			diskstats[j] = atoi(buffer);
+			j++;
+		}
+		strcpy(buffer,strtok(NULL," "));	
+	}
+
+	diskstats[2] = diskstats[0]+diskstats[1];
+
+	printf("Numero de peticiones al disco realizadas: %i\n",diskstats[2]);
+	printf("Numero de lecturas realizadas: %i\n",diskstats[0]);
+	printf("Numero de escrituras realizadas: %i\n",diskstats[1]);
+
 	strcpy(path,"/proc/meminfo");
     strcpy(before,"MemTotal:");
     strcpy(after,"");
@@ -137,11 +168,12 @@ void stats(void){
     parseFile(fp,path,before,after,&buff);
     memoria[1] = atoi(buff);
 	printf("Memoria disponible/total %i/%i\n",memoria[1],memoria[0]);
-}
 
-void printInterval(int intervals[]){
-	printf("%i\n",intervals[0]);
-	printf("%i\n",intervals[1]);
+	strcpy(path,"/proc/loadavg");
+    strcpy(before,"");
+    strcpy(after," ");
+    parseFile(fp,path,before,after,&buff);
+    printf("Promedio de carga del sistema en el ultimo minuto: %s\n",buff);
 }
 
 void printHelp(){

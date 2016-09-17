@@ -8,6 +8,7 @@ long* tiempo;
 long segundos;
 int CPU_times[3];
 int memoria[2];
+int diskstats[3];
 
 char buffer[BUFFSIZE];
 char path[32];
