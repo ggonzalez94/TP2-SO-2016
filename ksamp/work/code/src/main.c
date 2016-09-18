@@ -51,10 +51,10 @@ int main (int argc, char* argv[]){
     printHeader(fp,buffer);
     printMainProgram();
 
-    if(flags[0]) printStats();
+    if(flags[0]) printStats(flags[4]);
 
     if(flags[1]){
-    	printStats();
+    	printStats(flags[4]);
 
    		calculateInterval(oldvalues);
     	do{

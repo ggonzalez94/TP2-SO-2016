@@ -35,7 +35,7 @@ void printMainProgram(){
 }
 
 
-void printStats(void){
+void printStats(int human){
 
 	printf("\nInformacion adicional:\n");
 
@@ -52,15 +52,24 @@ void printStats(void){
 	for (int i = 0; i < 4; ++i)
 	{
 		if((i==0) | (i==2) | (i==3)){
-			CPU_times[j] = atoi(buffer);
+			CPU_times[j] = atof(buffer);
 			j++;
 		}
 		strcpy(buffer,strtok(NULL," "));	
 	}
 
-	printf("Cantidad de tiempo CPU usada para usuario: %i\n", CPU_times[0]);
-   	printf("Cantidad de tiempo CPU usado por el sistema: %i\n", CPU_times[1]);
-   	printf("Cantidad de tiempo en idle: %i\n", CPU_times[2]);
+
+    if(human){
+        printf("Tiempo CPU usada para usuario: %.2f segundos = %.2f minutos = %.2f horas\n", CPU_times[0]/60, CPU_times[0]/3600, CPU_times[0]/216000);
+        printf("Tiempo CPU usado por el sistema: %.2f segundos = %.2f minutos = %.2f horas\n", CPU_times[1]/60, CPU_times[1]/3600, CPU_times[1]/216000);
+        printf("Tiempo en idle: %.2f segundos = %.2f minutos = %.2f horas\n", CPU_times[1]/60, CPU_times[2]/3600, CPU_times[2]/216000);
+    }
+
+    else{
+    	printf("Tiempo CPU usada para usuario: %.2f jiffies\n", CPU_times[0]);
+       	printf("Tiempo CPU usado por el sistema: %.2f jiffies\n", CPU_times[1]);
+       	printf("Tiempo en idle: %.2f jiffies\n", CPU_times[2]);
+    }
 
 	getBootTime(fp,&buff,segundos);
 	printf("Fecha y hora de booteo: %s",buff);

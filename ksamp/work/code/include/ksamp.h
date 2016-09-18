@@ -3,7 +3,7 @@ char * buff;
 int filesystems;
 long* tiempo;
 long segundos;
-int CPU_times[3];
+double CPU_times[3];
 
 char buffer[256];
 char path[32];
@@ -17,7 +17,7 @@ double oldvalues[6];
 int printHeader(FILE*,char []);
 int getSupFs(FILE*,int*);
 int getBootTime (FILE*, char**, long segundos);
-void printStats(void);
+void printStats(int);
 void printHelp(void);
 void printMainProgram(void);
 int parseFile(FILE* fp, char path[], char before[], char after[], char** buff);
