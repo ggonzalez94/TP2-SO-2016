@@ -33,6 +33,8 @@ Además, permite mostrar información actualizada cada cierto tiempo, para tener
  - Cantidad de memoria configurada en el hardware. 
  - Cantidad de memoria disponible. 
  - Lista de los promedios de carga de en el último minuto. 
+ - Información amigable al usuario, con unidades fáciles de leer.
+ - Información diferencial, para visualizar los cambios en los últimos segundos.
 
 ## 2. Instrucciones de instalación
 ---
@@ -56,16 +58,22 @@ Además, permite mostrar información actualizada cada cierto tiempo, para tener
 ```
 % ./ksamp
 ```
- - Además, puede ejecutar uno de los siguientes comandos para visualizar información adicional:
+ - Además, puede agregar los siguientes modificadores para visualizar información adicional:
 ```
-% ./ksamp -s
-% ./ksamp -stats
-% ./ksamp -l 'PARAM1' 'PARAM2'
-% ./ksamp -interval 'PARAM1' 'PARAM2'
+-s, --stats
+-f, --friendly
+-d, --differential
+-l, --interval 'PARAM1' 'PARAM2'
+
 ```
+Donde ```PARAM1``` y ```PARAM2``` son el tiempo de refresco de la informacion, y el tiempo total que se quiere monitorear.
+
  - Para obtener ayuda, ejecute:
 ```
 % ./ksamp -h
 % ./ksamp -help
 ```
-
+Al compilar y linkear, se genera un archivo donde se guardan los posibles errores y advertencias que encuentre el programa CppCheck al realizar el análisis estático del código. Este archivo se encuentra en:
+```
+ksamp/work/code/err.txt
+```

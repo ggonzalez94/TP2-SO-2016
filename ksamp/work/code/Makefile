@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-c -Wall -pedantic -O2
-OBJECTS=main.o printHeader.o getSupFs.o getBootTime.o parseFile.o
+OBJECTS=main.o printHeader.o getSupFs.o getBootTime.o parseFile.o functionOpt.o
 PATHOBJECTS=$(addprefix $(ODIR)/,$(OBJECTS))
 ODIR=obj
 LDIR=include
@@ -38,6 +38,9 @@ getBootTime.o: $(SRCDIR)/getBootTime.c
 
 parseFile.o: $(SRCDIR)/parseFile.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
+
+functionOpt.o: $(SRCDIR)/functionOpt.c $(LDIR)/ksamp.h
+	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
 
 clean:
 	@echo Borrando archivos objeto, ksamp compilado y log de errores
