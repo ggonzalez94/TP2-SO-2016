@@ -24,3 +24,5 @@ int parseFile(FILE* fp, char path[], char before[], char after[], char** buff);
 void calculateInterval(double values[]);
 void printIntervals (double values[], int human);
 void printDifferences (double values[], int human);
+void checkInput(int flags[], int intervals[]);
+void exitAndHelp(void);

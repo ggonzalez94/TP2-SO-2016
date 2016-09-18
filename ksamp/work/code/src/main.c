@@ -23,23 +23,25 @@ int main (int argc, char* argv[]){
     int long_index =0;
     while ((opt = getopt_long(argc, argv,"sl:hdf", long_options, &long_index )) != -1) {
         switch (opt) {
-             case 's' : flags[0]=1;
+             case 's' : flags[0]++;
                  break;
-             case 'l' : flags[1]=1;
+             case 'l' : flags[1]++;
              			intervals[0] = atoi(optarg);
              			intervals[1] = atoi(optarg + strlen(optarg)+1);
              	 break;
-             case 'h' :	flags[2]=1;
+             case 'h' :	flags[2]++;
              	 break;
-             case 'd' : flags[3]=1;
+             case 'd' : flags[3]++;
              	 break;
-             case 'f' : flags[4]=1;
+             case 'f' : flags[4]++;
              	 break;
              default: printf("Por favor seleccione una opcion valida\n");
              		  printf("Ingrese la opcion --help o -h para obtener ayuda\n");	
                  exit(EXIT_FAILURE);
         }
     }
+
+    checkInput(flags,intervals);
 
     if(flags[2]) {
     	printHelp();
@@ -113,4 +115,29 @@ void printHelp(){
 	printf("-d, --differential       Al ver las estadisticas actualizadas, ver la diferencia");
 	printf("                         con respecto al valor en el momento anterior,\n");
 	printf("                         en lugar del valor absoluto\n");
+}
+
+void checkInput(int flags[], int intervals[]){
+	//help no puede combinarse con nada
+	if(flags[2] && (flags[0] || flags[1] || flags[3] || flags[4])) exitAndHelp();
+	//chequeo combinaciones invalidas de -s
+	if(flags[0] && (flags[1] || flags[3])) exitAndHelp();
+	//-d y -f no pueden llamarse juntas (no sin -l)
+	if(flags[3] && (flags[4])) exitAndHelp();
+
+	//miro repeticiones de flags
+	for (int i = 0; i < 5; ++i)
+	{
+		if(flags[i]>1)
+			exitAndHelp();
+	}
+
+	//miro valores incorrectos de -l
+	if((intervals[0] < 1 || intervals[1] < 1) && flags[1]) exitAndHelp();
+}
+
+void exitAndHelp(){
+	printf("Por favor seleccione una opcion valida\n");
+	printf("Ingrese la opcion --help o -h para obtener ayuda\n");	
+	exit(EXIT_FAILURE);
 }
