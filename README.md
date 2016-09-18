@@ -77,3 +77,4 @@ Al compilar y linkear, se genera un archivo donde se guardan los posibles errore
 ```
 ksamp/work/code/err.txt
 ```
+Si desea más información, remítase a la documentación proporcionada, que se encuentra en la ruta ```\ksamp\doc\html\index.html```

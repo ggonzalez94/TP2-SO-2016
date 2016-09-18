@@ -3,41 +3,30 @@
 #include <string.h>
 #include "../include/ksamp.h"
 
-const long minute = 60;
-const long hour = 60 * 60;
-const long day = 60 * 60 * 24;
+void getMainProgram(struct Datos *datos){
 
-
-void printMainProgram(){
-
-	strcpy(path,"/proc/cpuinfo");
-    strcpy(before,"model name	: ");
+    strcpy(path,"/proc/cpuinfo");
+    strcpy(before,"model name");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
-    printf("CPU :%s",buff);
+    strcpy(datos->cpu,buff+2);
 
     strcpy(path,"/proc/version");
     strcpy(before,"version ");
     strcpy(after,"(");
     parseFile(fp,path,before,after,&buff);
-    printf("Version del Kernel de Linux: %s\n",buff);
+    strcpy(datos->kernel,buff);
 
     strcpy(path,"/proc/uptime");
     strcpy(before," ");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
+    datos->uptime = atol(buff);
 
-	*tiempo = atol(buff);
-	printf("Uptime: %ldD %ld:%02ld:%02ld \n",segundos/day, (segundos%day)/hour,(segundos%hour)/minute,segundos%minute);
-
-	getSupFs(fp,&filesystems);
-	printf("El kernel soporta %i sistemas de archivos diferentes\n",filesystems);
+    getSupFs(fp,&datos->filesystems);
 }
 
-
-void printStats(int human){
-
-	printf("\nInformacion adicional:\n");
+void getStats(struct Datos *datos){
 
    	strcpy(path,"/proc/stat");
     strcpy(before,"cpu");
@@ -47,48 +36,31 @@ void printStats(int human){
 	buff = strstr(buff," ") + strlen(" ")+1;
 	strcpy(buffer,strtok(buff," "));
 
-	int j = 0;
+    datos->userTime = atoi(buffer);
+    strcpy(buffer,strtok(NULL," "));
+    strcpy(buffer,strtok(NULL," "));
+    datos->sysTime = atoi(buffer);
+    strcpy(buffer,strtok(NULL," "));
+    datos->idleTime = atoi(buffer);
 
-	for (int i = 0; i < 4; ++i)
-	{
-		if((i==0) | (i==2) | (i==3)){
-			CPU_times[j] = atof(buffer);
-			j++;
-		}
-		strcpy(buffer,strtok(NULL," "));	
-	}
-
-
-    if(human){
-        printf("Tiempo CPU usada para usuario: %.2f segundos = %.2f minutos = %.2f horas\n", CPU_times[0]/60, CPU_times[0]/3600, CPU_times[0]/216000);
-        printf("Tiempo CPU usado por el sistema: %.2f segundos = %.2f minutos = %.2f horas\n", CPU_times[1]/60, CPU_times[1]/3600, CPU_times[1]/216000);
-        printf("Tiempo en idle: %.2f segundos = %.2f minutos = %.2f horas\n", CPU_times[1]/60, CPU_times[2]/3600, CPU_times[2]/216000);
-    }
-
-    else{
-    	printf("Tiempo CPU usada para usuario: %.2f jiffies\n", CPU_times[0]);
-       	printf("Tiempo CPU usado por el sistema: %.2f jiffies\n", CPU_times[1]);
-       	printf("Tiempo en idle: %.2f jiffies\n", CPU_times[2]);
-    }
-
-	getBootTime(fp,&buff,segundos);
-	printf("Fecha y hora de booteo: %s",buff);
-
+	getBootTime(&buff,datos->uptime);
+    strcpy(datos->bootTime, buff);
+	
     strcpy(path,"/proc/stat");
     strcpy(before,"ctxt ");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
-    printf("Cantidad de cambios de contexto: %s",buff);
-
+    datos->contextChanges = atoi(buff);
+    
 	strcpy(path,"/proc/stat");
     strcpy(before,"processes ");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
-    printf("Cantidad de procesos creados: %s",buff);
+    datos->processes = atoi(buff);
 }
 
 
-void calculateInterval(double values[]){
+void calculateInterval(struct Interval *interval){
 
 	strcpy(path,"/proc/diskstats");
     strcpy(before,"sda");
@@ -98,31 +70,31 @@ void calculateInterval(double values[]){
 	buff = strstr(buff," ") + strlen(" ");	
 	strcpy(buffer,strtok(buff," "));
 
-	int j = 0;
+    interval->reads = atoi(buffer);
+    strcpy(buffer,strtok(NULL," "));
+    strcpy(buffer,strtok(NULL," "));
+    strcpy(buffer,strtok(NULL," "));
+    strcpy(buffer,strtok(NULL," "));
+    interval->writes = atoi(buffer);
 
-	for (int i = 0; i < 5; ++i)
-	{
-		if((i==0) | (i==4)){
-			values[j] = atof(buffer);
-			j++;
-		}
-		strcpy(buffer,strtok(NULL," "));	
-	}
-
-	values[2] = values[0]+values[1];
+    interval->rw = interval->reads + interval->writes;
 
 	strcpy(path,"/proc/meminfo");
     strcpy(before,"MemTotal:");
     strcpy(after,"");
     parseFile(fp,path,before,after,&buff);
-    values[3] = atof(buff);
+    
+    interval->memTot = atoi(buff);
+
     strcpy(before,"MemFree:");
     parseFile(fp,path,before,after,&buff);
-    values[4] = atof(buff);
+    
+    interval->memDisp = atoi(buff);
 
 	strcpy(path,"/proc/loadavg");
     strcpy(before,"");
     strcpy(after," ");
     parseFile(fp,path,before,after,&buff);
-    values[5] = atof(buff);
+    
+    interval->loadAvg = atof(buff);
 }
