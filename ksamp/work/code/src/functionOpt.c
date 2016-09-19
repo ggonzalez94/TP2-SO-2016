@@ -18,8 +18,8 @@ void getMainProgram(struct Datos *datos){
     strcpy(datos->kernel,buff);
 
     strcpy(path,"/proc/uptime");
-    strcpy(before," ");
-    strcpy(after,"");
+    strcpy(before,"");
+    strcpy(after," ");
     parseFile(fp,path,before,after,&buff);
     datos->uptime = atol(buff);
 

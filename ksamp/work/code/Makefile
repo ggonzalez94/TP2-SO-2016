@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-c -Wall -pedantic -O2
-OBJECTS=main.o printHeader.o getSupFs.o getBootTime.o parseFile.o functionOpt.o
+OBJECTS=main.o printHeader.o getSupFs.o getBootTime.o parseFile.o functionOpt.o printFunctions.o
 PATHOBJECTS=$(addprefix $(ODIR)/,$(OBJECTS))
 ODIR=obj
 LDIR=include
@@ -40,6 +40,9 @@ parseFile.o: $(SRCDIR)/parseFile.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
 functionOpt.o: $(SRCDIR)/functionOpt.c $(LDIR)/ksamp.h
+	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
+
+printFunctions.o: $(SRCDIR)/printFunctions.c $(LDIR)/ksamp.h
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
 
 clean:

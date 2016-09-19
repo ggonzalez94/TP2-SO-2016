@@ -14,12 +14,12 @@ struct Datos {
    long  uptime;
    int   filesystems;
 
-   int 	 userTime;
-   int   sysTime;
-   int   idleTime;
-   char  bootTime[50];
-   int   contextChanges;
-   int   processes;
+   double	userTime;
+   double  	sysTime;
+   double  	idleTime;
+   char  	bootTime[50];
+   int   	contextChanges;
+   int   	processes;
 };
 
 struct Interval{
@@ -53,3 +53,5 @@ void printDifferences (struct Interval, int human);
 void checkInput(struct Flags, int intervals[]);
 void exitAndHelp(void);
 void getMainProgram(struct Datos*);
+void restarIntervalos(struct Interval, struct Interval, struct Interval*);
+void actualizarIntervalos(struct Interval* , struct Interval);
