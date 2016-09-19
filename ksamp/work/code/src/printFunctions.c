@@ -1,3 +1,11 @@
+/**
+ * @file printFunctions.c
+ * @brief Contiene las funciones que imprimen informacion.
+ *
+ * Se encuentran las funciones que imprimen por consola informacion al usuario.
+ * Son llamadas de acuerdo a los operadores ingresados al ejecutar el programa.
+ */
+
 #include <asm/param.h>      //para la constante HZ
 #include "../include/ksamp.h"
 
@@ -5,6 +13,13 @@ const long minute = 60;
 const long hour = 60 * 60;
 const long day = 60 * 60 * 24;
 
+/**
+    * @brief Imprime los datos basicos del sistema.
+    *
+    * Muestra el modelo de cpu, la version de kernel del sistema, el tiempo que
+    * la pc estuvo encendida, y la cantidad de sistemas de archivos soportados por el kernel.
+    * @param datos Estructura de datos con la informacion necesaria para imprimir
+    */
 void printMainProgram(struct Datos datos){
 
     long ut = datos.uptime;
@@ -15,6 +30,15 @@ void printMainProgram(struct Datos datos){
     printf("El kernel soporta %i sistemas de archivos diferentes\n",datos.filesystems);
 }
 
+
+/**
+    * @brief Muestra por consola mas informacion sobre el sistema
+    *
+    * Imprime el tiempo de uso de la CPU, la hora de inicio del sistema, los cambios de contexto
+    * y la cantidad de procesos creados. Admite formateo amigable de los datos.
+    * @param datos Estructura de datos con la informacion necesaria para imprimir
+    * @param human Flag de visualizacion de datos de manera amigable
+    */
 void printStats(struct Datos datos, int human){
 
     printf("\nInformacion adicional:\n");
@@ -42,7 +66,7 @@ void printStats(struct Datos datos, int human){
     * Es llamada al ingresar la opcion --interval, que muestra informacion avanzada sobre los
     * valores leidos a lo largo del tiempo ingresado, actualizandose automaticamente.
     * Si se solicita la impresion amigable, convierte los valores de memoria de KB a MB para una lectura mas facil de los datos.
-    * @param values[] Arreglo con los valores a imprimir
+    * @param data Estructura de datos con la informacion necesaria para imprimir
     * @param human Flag de impresion amigable
     * @see calculateInterval()
     */
@@ -61,7 +85,7 @@ void printIntervals(struct Interval data, int human){
     * Es llamada al ingresar la opcion --differential, que muestra el cambio en los 
     * valores leidos a lo largo del tiempo ingresado, actualizandose automaticamente.
     * Si se solicita la impresion amigable, convierte los valores de memoria de KB a MB para una lectura mas facil de los datos.
-    * @param values[] Arreglo con los valores a imprimir
+    * @param data Estructura de datos con la informacion necesaria para imprimir
     * @param human Flag de impresion amigable
     * @see calculateInterval()
     */

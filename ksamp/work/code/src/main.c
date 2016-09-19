@@ -1,3 +1,20 @@
+/** @file kernel.c
+ *  @brief An initial kernel.c
+ *
+ *  This file contains the kernel's
+ *  main() function.
+ *
+ *  You should add your own comments to
+ *  replace this one.
+ *
+ *  This is where you will eventually setup
+ *  your game board and have it run.
+ *
+ *  @author Harry Q. Bovik (hqbovik)
+ *  @author Fred Hacker (fhacker)
+ *  @bug No known bugs.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

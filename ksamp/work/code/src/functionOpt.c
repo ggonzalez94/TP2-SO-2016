@@ -1,3 +1,12 @@
+/** @file functionOpt.c
+ *  @brief Funciones que buscan informacion sobre el sistema
+ *
+ *  Incluye funciones que buscan en el sistema de archivos proc
+ *  de linux y formatean la informacion deseada, guardandola en
+ *  una estructura de datos apropiada para su impresion.
+ *  @see printFunctions.c
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

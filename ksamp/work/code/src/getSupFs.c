@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
     /**
     * @brief Calcula la cantidad de sistemas de archivos soportados.
     *

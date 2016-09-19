@@ -1,3 +1,11 @@
+/**
+ * @file ksamp.h
+ * @brief Header con declaracion de variables y prototipos de funciones.
+ *
+ * Aqui se declaran las variables a usar por el programa, los prototipos de funciones
+ * a utilizar, y las estructuras de datos que las mismas emplean para funcionar.
+ */
+
 #include <stdio.h>
 
 FILE *fp;

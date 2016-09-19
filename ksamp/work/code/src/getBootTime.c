@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <time.h>
     /**
     * @brief Obtiene la hora de inicio del sistema
