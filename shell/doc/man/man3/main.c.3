@@ -1,0 +1,108 @@
+.TH "/home/gustav/TP1-SO-2016/ksamp/work/code/src/main.c" 3 "Sat Sep 24 2016" "ksamp" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/gustav/TP1-SO-2016/ksamp/work/code/src/main.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <sys/unistd\&.h>\fP
+.br
+\fC#include <getopt\&.h>\fP
+.br
+\fC#include '\&.\&./include/ksamp\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.RI "\fIPunto de inicio del programa\&. \fP"
+.ti -1c
+.RI "void \fBcheckInput\fP (struct \fBFlags\fP flags, int parametros[])"
+.br
+.RI "\fIChequea que los comandos introducidos sean validos\&. \fP"
+.ti -1c
+.RI "void \fBexitAndHelp\fP ()"
+.br
+.RI "\fIMuestra un mensaje de error y finaliza el programa\&. \fP"
+.ti -1c
+.RI "void \fBrestarIntervalos\fP (struct \fBInterval\fP interval, struct \fBInterval\fP intervalOld, struct \fBInterval\fP *difference)"
+.br
+.ti -1c
+.RI "void \fBactualizarIntervalos\fP (struct \fBInterval\fP *intervalOld, struct \fBInterval\fP interval)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void actualizarIntervalos (struct \fBInterval\fP * intervalOld, struct \fBInterval\fP interval)"
+
+.PP
+Definition at line 175 of file main\&.c\&.
+.SS "void checkInput (struct \fBFlags\fP flags, int parametros[])"
+
+.PP
+Chequea que los comandos introducidos sean validos\&. Recibe los parametros extras que se ingresaron, y comprueba que sean validos, que su combinacion sea posible, y que no se repitan\&. Ademas verifica que los valores ingresados con --interval no sean negativos\&. Si detecta algun error, llama a la funcion \fBexitAndHelp()\fP\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIflags[]\fP Un arreglo con los comandos adicionales ingresados 
+.br
+\fIintervals[]\fP Un arreglo con los valores pasados al comando -l 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBexitAndHelp()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 137 of file main\&.c\&.
+.SS "void exitAndHelp (void)"
+
+.PP
+Muestra un mensaje de error y finaliza el programa\&. Es llamada cuando se ingresan parametros incorrectos al llamar al programa Indica al usuario como ver la lista de comandos permitidos y luego finaliza la ejecucion del programa\&. 
+.PP
+\fBSee also:\fP
+.RS 4
+\fBcheckInput()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 160 of file main\&.c\&.
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Punto de inicio del programa\&. Iniciado al ingresar el comando \&./ksamp en consola\&. Admite parametros extra, con los que realiza funciones avanzadas\&. En base de estos parametros llama a las funciones correspondientes\&. 
+.PP
+\fBSee also:\fP
+.RS 4
+\fBcheckInput()\fP 
+.PP
+\fBprintMainProgram()\fP 
+.PP
+\fBgetStats()\fP 
+.PP
+calculateInterval(double values[]) 
+.RE
+.PP
+
+.PP
+Definition at line 36 of file main\&.c\&.
+.SS "void restarIntervalos (struct \fBInterval\fP interval, struct \fBInterval\fP intervalOld, struct \fBInterval\fP * difference)"
+
+.PP
+Definition at line 166 of file main\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ksamp from the source code\&.

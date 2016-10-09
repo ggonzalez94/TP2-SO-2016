@@ -1,0 +1,341 @@
+.TH "/home/gustav/TP1-SO-2016/ksamp/work/code/include/ksamp.h" 3 "Sat Sep 24 2016" "ksamp" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/gustav/TP1-SO-2016/ksamp/work/code/include/ksamp.h \- Header con declaracion de variables y prototipos de funciones\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBDatos\fP"
+.br
+.ti -1c
+.RI "struct \fBInterval\fP"
+.br
+.ti -1c
+.RI "struct \fBFlags\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBprintHeader\fP (FILE *, char[])"
+.br
+.RI "\fIImprime el mensaje de bienvenida\&. \fP"
+.ti -1c
+.RI "int \fBgetSupFs\fP (FILE *, int *)"
+.br
+.RI "\fICalcula la cantidad de sistemas de archivos soportados\&. \fP"
+.ti -1c
+.RI "int \fBgetBootTime\fP (char **, long segundos)"
+.br
+.RI "\fIObtiene la hora de inicio del sistema\&. \fP"
+.ti -1c
+.RI "void \fBgetStats\fP (struct \fBDatos\fP *)"
+.br
+.ti -1c
+.RI "void \fBprintStats\fP (struct \fBDatos\fP, int)"
+.br
+.RI "\fIMuestra por consola mas informacion sobre el sistema\&. \fP"
+.ti -1c
+.RI "void \fBprintHelp\fP (void)"
+.br
+.RI "\fIImprime los comandos de ayuda\&. \fP"
+.ti -1c
+.RI "void \fBprintMainProgram\fP (struct \fBDatos\fP)"
+.br
+.RI "\fIImprime los datos basicos del sistema\&. \fP"
+.ti -1c
+.RI "int \fBparseFile\fP (FILE *\fBfp\fP, char \fBpath\fP[], char \fBbefore\fP[], char \fBafter\fP[], char **\fBbuff\fP)"
+.br
+.RI "\fIParsea un archivo en busca de una cadena de caracteres\&. \fP"
+.ti -1c
+.RI "void \fBcalculateInterval\fP (struct \fBInterval\fP *)"
+.br
+.ti -1c
+.RI "void \fBprintIntervals\fP (struct \fBInterval\fP, int human)"
+.br
+.RI "\fIImprime valores leidos de /proc\&. \fP"
+.ti -1c
+.RI "void \fBprintDifferences\fP (struct \fBInterval\fP, int human)"
+.br
+.RI "\fIImprime las variaciones en los valores leidos de /proc\&. \fP"
+.ti -1c
+.RI "void \fBcheckInput\fP (struct \fBFlags\fP, int intervals[])"
+.br
+.RI "\fIChequea que los comandos introducidos sean validos\&. \fP"
+.ti -1c
+.RI "void \fBexitAndHelp\fP (void)"
+.br
+.RI "\fIMuestra un mensaje de error y finaliza el programa\&. \fP"
+.ti -1c
+.RI "void \fBgetMainProgram\fP (struct \fBDatos\fP *)"
+.br
+.ti -1c
+.RI "void \fBrestarIntervalos\fP (struct \fBInterval\fP, struct \fBInterval\fP, struct \fBInterval\fP *)"
+.br
+.ti -1c
+.RI "void \fBactualizarIntervalos\fP (struct \fBInterval\fP *, struct \fBInterval\fP)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "FILE * \fBfp\fP"
+.br
+.ti -1c
+.RI "char * \fBbuff\fP"
+.br
+.ti -1c
+.RI "char \fBbuffer\fP [256]"
+.br
+.ti -1c
+.RI "char \fBpath\fP [32]"
+.br
+.ti -1c
+.RI "char \fBbefore\fP [32]"
+.br
+.ti -1c
+.RI "char \fBafter\fP [32]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header con declaracion de variables y prototipos de funciones\&. 
+
+Aqui se declaran las variables a usar por el programa, los prototipos de funciones a utilizar, y las estructuras de datos que las mismas emplean para funcionar\&. 
+.PP
+Definition in file \fBksamp\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void actualizarIntervalos (struct \fBInterval\fP *, struct \fBInterval\fP)"
+
+.PP
+Definition at line 175 of file main\&.c\&.
+.SS "void calculateInterval (struct \fBInterval\fP *)"
+
+.PP
+Definition at line 72 of file functionOpt\&.c\&.
+.SS "void checkInput (struct \fBFlags\fP flags, int parametros[])"
+
+.PP
+Chequea que los comandos introducidos sean validos\&. Recibe los parametros extras que se ingresaron, y comprueba que sean validos, que su combinacion sea posible, y que no se repitan\&. Ademas verifica que los valores ingresados con --interval no sean negativos\&. Si detecta algun error, llama a la funcion \fBexitAndHelp()\fP\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIflags[]\fP Un arreglo con los comandos adicionales ingresados 
+.br
+\fIintervals[]\fP Un arreglo con los valores pasados al comando -l 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBexitAndHelp()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 137 of file main\&.c\&.
+.SS "void exitAndHelp (void)"
+
+.PP
+Muestra un mensaje de error y finaliza el programa\&. Es llamada cuando se ingresan parametros incorrectos al llamar al programa Indica al usuario como ver la lista de comandos permitidos y luego finaliza la ejecucion del programa\&. 
+.PP
+\fBSee also:\fP
+.RS 4
+\fBcheckInput()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 160 of file main\&.c\&.
+.SS "int getBootTime (char ** btime, long segundos)"
+
+.PP
+Obtiene la hora de inicio del sistema\&. Calcula la hora de inicio del sistema, restando el uptime en segundos a la hora actual, y convirtiendolo en un formato legible\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbtime\fP Cadena de caracteres donde se almacena el valor obtenido, para ser procesado fuera de la llamada a funcion\&. 
+.br
+\fIsegundos\fP El tiempo en segundos que estuvo encendido el sistema 
+.RE
+.PP
+
+.PP
+Definition at line 10 of file getBootTime\&.c\&.
+.SS "void getMainProgram (struct \fBDatos\fP *)"
+
+.PP
+Definition at line 15 of file functionOpt\&.c\&.
+.SS "void getStats (struct \fBDatos\fP *)"
+
+.PP
+Definition at line 38 of file functionOpt\&.c\&.
+.SS "int getSupFs (FILE * fp, int * filesystems)"
+
+.PP
+Calcula la cantidad de sistemas de archivos soportados\&. Lee el archivo filesystems y cuenta en un bucle la cantidad de sistemas de archivos soportados por el Kernel\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfp\fP File Descriptor, utilizado para abrir los archivos necesarios como lectura\&. 
+.br
+\fIfilesystems\fP Puntero a tipo int, donde se va contando la cantidad de filesystems soportados\&. 
+.RE
+.PP
+
+.PP
+Definition at line 10 of file getSupFs\&.c\&.
+.SS "int parseFile (FILE * fp, char path[], char before[], char after[], char ** buff)"
+
+.PP
+Parsea un archivo en busca de una cadena de caracteres\&. Recibido un path, una cadena a buscar y delimitadores, busca en el archivo y guarda la cadena en buff\&. Si no puede abrir el archivo termina el programa\&. Busca iterativamente hasta encontrar la primer ocurrencia del string buscado y la recorta en base a los delimitadores\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfp\fP File Descriptor, usado para abrir un archivo como lectura 
+.br
+\fIpath[]\fP Cadena de caracteres con la ruta en la que se buscara el archivo 
+.br
+\fIbefore[]\fP String con el delimitador que se encuentra antes de la cadena deseada 
+.br
+\fIafter[]\fP String con el delimitador que se encuentra despues de la cadena deseada 
+.br
+\fIbuff\fP Puntero a char donde se almacena el resultado 
+.RE
+.PP
+
+.PP
+Definition at line 17 of file parseFile\&.c\&.
+.SS "void printDifferences (struct \fBInterval\fP data, int human)"
+
+.PP
+Imprime las variaciones en los valores leidos de /proc\&. Es llamada al ingresar la opcion --differential, que muestra el cambio en los valores leidos a lo largo del tiempo ingresado, actualizandose automaticamente\&. Si se solicita la impresion amigable, convierte los valores de memoria de KB a MB para una lectura mas facil de los datos\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata\fP Estructura de datos con la informacion necesaria para imprimir 
+.br
+\fIhuman\fP Flag de impresion amigable 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBcalculateInterval()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file printFunctions\&.c\&.
+.SS "int printHeader (FILE * fp, char buffer[])"
+
+.PP
+Imprime el mensaje de bienvenida\&. Al iniciar el programa, imprime por consola un mensaje de bienvenida, que consiste en el nombre de la pc donde se esta ejecutando, y la hora y fecha actual\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfp\fP File Descriptor, utilizado para abrir los archivos necesarios como lectura 
+.br
+\fIbuffer[]\fP Arreglo de caracteres usado para almacenar las cadenas encontradas 
+.RE
+.PP
+
+.PP
+Definition at line 12 of file printHeader\&.c\&.
+.SS "void printHelp (void)"
+
+.PP
+Imprime los comandos de ayuda\&. Muestra una lista de los comandos validos del programa, su version corta y larga, y una breve explicacion de cada uno\&. 
+.PP
+Definition at line 107 of file printFunctions\&.c\&.
+.SS "void printIntervals (struct \fBInterval\fP data, int human)"
+
+.PP
+Imprime valores leidos de /proc\&. Es llamada al ingresar la opcion --interval, que muestra informacion avanzada sobre los valores leidos a lo largo del tiempo ingresado, actualizandose automaticamente\&. Si se solicita la impresion amigable, convierte los valores de memoria de KB a MB para una lectura mas facil de los datos\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata\fP Estructura de datos con la informacion necesaria para imprimir 
+.br
+\fIhuman\fP Flag de impresion amigable 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBcalculateInterval()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 73 of file printFunctions\&.c\&.
+.SS "void printMainProgram (struct \fBDatos\fP datos)"
+
+.PP
+Imprime los datos basicos del sistema\&. Muestra el modelo de cpu, la version de kernel del sistema, el tiempo que la pc estuvo encendida, y la cantidad de sistemas de archivos soportados por el kernel\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdatos\fP Estructura de datos con la informacion necesaria para imprimir 
+.RE
+.PP
+
+.PP
+Definition at line 23 of file printFunctions\&.c\&.
+.SS "void printStats (struct \fBDatos\fP datos, int human)"
+
+.PP
+Muestra por consola mas informacion sobre el sistema\&. Imprime el tiempo de uso de la CPU, la hora de inicio del sistema, los cambios de contexto y la cantidad de procesos creados\&. Admite formateo amigable de los datos\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdatos\fP Estructura de datos con la informacion necesaria para imprimir 
+.br
+\fIhuman\fP Flag de visualizacion de datos de manera amigable 
+.RE
+.PP
+
+.PP
+Definition at line 42 of file printFunctions\&.c\&.
+.SS "void restarIntervalos (struct \fBInterval\fP, struct \fBInterval\fP, struct \fBInterval\fP *)"
+
+.PP
+Definition at line 166 of file main\&.c\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char after[32]"
+
+.PP
+Definition at line 17 of file ksamp\&.h\&.
+.SS "char before[32]"
+
+.PP
+Definition at line 16 of file ksamp\&.h\&.
+.SS "char* buff"
+
+.PP
+Definition at line 12 of file ksamp\&.h\&.
+.SS "char buffer[256]"
+
+.PP
+Definition at line 13 of file ksamp\&.h\&.
+.SS "FILE* fp"
+
+.PP
+Definition at line 11 of file ksamp\&.h\&.
+.SS "char path[32]"
+
+.PP
+Definition at line 15 of file ksamp\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ksamp from the source code\&.

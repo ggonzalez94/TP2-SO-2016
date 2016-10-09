@@ -1,0 +1,39 @@
+.TH "/home/gustav/TP1-SO-2016/ksamp/work/code/src/getBootTime.c" 3 "Sat Sep 24 2016" "ksamp" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/gustav/TP1-SO-2016/ksamp/work/code/src/getBootTime.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <time\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBgetBootTime\fP (char **btime, long segundos)"
+.br
+.RI "\fIObtiene la hora de inicio del sistema\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int getBootTime (char ** btime, long segundos)"
+
+.PP
+Obtiene la hora de inicio del sistema\&. Calcula la hora de inicio del sistema, restando el uptime en segundos a la hora actual, y convirtiendolo en un formato legible\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbtime\fP Cadena de caracteres donde se almacena el valor obtenido, para ser procesado fuera de la llamada a funcion\&. 
+.br
+\fIsegundos\fP El tiempo en segundos que estuvo encendido el sistema 
+.RE
+.PP
+
+.PP
+Definition at line 10 of file getBootTime\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ksamp from the source code\&.
