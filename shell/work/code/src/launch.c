@@ -11,14 +11,18 @@ int launch(char **args)
   pid = fork();
   if (pid == 0) {
     // Child process
+
     if (execvp(args[0], args) == -1) {
       perror("lsh");
     }
     exit(EXIT_FAILURE);
-  } else if (pid < 0) {
+  } 
+  else if (pid < 0) {
     // Error forking
     perror("lsh");
-  } else {
+  } 
+
+  else {
     // Parent process
     do {
       wpid = waitpid(pid, &status, WUNTRACED);

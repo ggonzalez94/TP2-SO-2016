@@ -1,5 +1,11 @@
+#define LENGTH_HOSTNAME 25
+#define LENGTH_DIRECTORY 111
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #include "../include/main_includes.h"
 
@@ -10,8 +16,20 @@ int main(int argc, char **argv)
   char **args;
   int status;
 
+  char *host_name = malloc(sizeof(char) * LENGTH_HOSTNAME);
+  gethostname(host_name,LENGTH_HOSTNAME);
+
+  struct passwd *p = getpwuid(getuid());
+
+  char *current_directory = malloc(sizeof(char) * LENGTH_DIRECTORY);
+  getcwd(current_directory,LENGTH_DIRECTORY);
+
   // Correr el loop principal
   do {
+    //Username@Hostname: Current_Directory >
+    printf("%s@", p->pw_name);
+    printf("%s: ",host_name);
+    printf("%s ",current_directory);
     printf("> ");
     line = read_line();
     args = split_line(line);
@@ -19,6 +37,7 @@ int main(int argc, char **argv)
 
     free(line);
     free(args);
+    getcwd(current_directory,LENGTH_DIRECTORY);
   } while (status);
 
 

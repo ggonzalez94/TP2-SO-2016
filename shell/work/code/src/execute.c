@@ -22,7 +22,7 @@ int execute(char **args)
 
   for (i = 0; i < lsh_num_builtins(); i++) {
      if (is_builtin(args,i)) {
-       execute_builtin(args,i);
+       return execute_builtin(args,i);
      }
   }
 

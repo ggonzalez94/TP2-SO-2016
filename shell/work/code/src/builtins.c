@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "../include/builtins.h"
 
 /*
-  List of builtin commands, followed by their corresponding functions.
+  Array de builtins
  */
 char *builtin_str[] = {
   "cd",
@@ -14,6 +15,9 @@ char *builtin_str[] = {
   "exit"
 };
 
+/*
+  Devuelve un puntero a la funcion built-in correspondiente
+*/
 int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_help,
@@ -25,7 +29,7 @@ int lsh_num_builtins() {
 }
 
 /*
-  Builtin function implementations.
+  Implementacion de las funciones built-in
 */
 int lsh_cd(char **args)
 {
@@ -42,15 +46,15 @@ int lsh_cd(char **args)
 int lsh_help(char **args)
 {
   int i;
-  printf("Stephen Brennan's LSH\n");
-  printf("Type program names and arguments, and hit enter.\n");
-  printf("The following are built in:\n");
+  printf("Bienvenido a Baash\n");
+  printf("Entre el comando y aprete enter\n");
+  printf("Los siguientes son comandos built-in\n");
 
   for (i = 0; i < lsh_num_builtins(); i++) {
     printf("  %s\n", builtin_str[i]);
   }
 
-  printf("Use the man command for information on other programs.\n");
+  printf("Use el comando man para info sobre otros programas. EJ: man ps\n");
   return 1;
 }
 
@@ -59,7 +63,7 @@ int lsh_exit(char **args)
   return 0;
 }
 
-int is_builtin(char **args,int i){
+bool is_builtin(char **args,int i){
   return strcmp(args[0], builtin_str[i]) == 0;
 }
 
