@@ -8,6 +8,7 @@
 #include <pwd.h>
 
 #include "../include/main_includes.h"
+#include "../include/colores.h"
 
 int main(int argc, char **argv)
 {
@@ -27,10 +28,10 @@ int main(int argc, char **argv)
   // Correr el loop principal
   do {
     //Username@Hostname: Current_Directory >
-    printf("%s@", p->pw_name);
-    printf("%s: ",host_name);
-    printf("%s ",current_directory);
-    printf("> ");
+    printf(BOLDMAGENTA "%s@", p->pw_name);
+    printf("%s: " RESET,host_name);
+    printf(BOLDGREEN"%s",current_directory);
+    printf("> "RESET);
     line = read_line();
     args = split_line(line);
     status = execute(args);

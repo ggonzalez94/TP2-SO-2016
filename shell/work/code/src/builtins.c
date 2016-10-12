@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include "../include/builtins.h"
+#include "../include/colores.h"
 
 /*
   Array de builtins
@@ -34,10 +35,10 @@ int lsh_num_builtins() {
 int lsh_cd(char **args)
 {
   if (args[1] == NULL) {
-    fprintf(stderr, "lsh: expected argument to \"cd\"\n");
+    fprintf(stderr, "Baash error: se esperaba un argumento para \"cd\"\n");
   } else {
     if (chdir(args[1]) != 0) {
-      perror("lsh");
+      perror("Baash error");
     }
   }
   return 1;
@@ -47,14 +48,14 @@ int lsh_help(char **args)
 {
   int i;
   printf("Bienvenido a Baash\n");
-  printf("Entre el comando y aprete enter\n");
-  printf("Los siguientes son comandos built-in\n");
+  printf("Ingrese el comando y presione enter\n");
+  printf("Los siguientes son comandos built-in:\n");
 
   for (i = 0; i < lsh_num_builtins(); i++) {
-    printf("  %s\n", builtin_str[i]);
+    printf(BOLDBLUE "  %s\n" RESET, builtin_str[i]);
   }
 
-  printf("Use el comando man para info sobre otros programas. EJ: man ps\n");
+  printf("Use el comando " BOLDBLUE "man" RESET " para info sobre otros programas. EJ: man ps\n");
   return 1;
 }
 

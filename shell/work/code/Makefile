@@ -22,7 +22,7 @@ cppcheck:
 	@echo Los resultados de la misma se encuentran en err.txt
 	cppcheck . 2> err.txt
 
-main.o: $(SRCDIR)/main.c $(LDIR)/main_includes.h
+main.o: $(SRCDIR)/main.c $(LDIR)/main_includes.h $(LDIR)/colores.h
 	@echo
 	@echo Compilando codigos fuente
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
@@ -45,4 +45,4 @@ launch.o: $(SRCDIR)/launch.c
 
 clean:
 	@echo Borrando archivos objeto, ksamp compilado y log de errores
-	rm -rf *o $(ODIR)/*.o shell $(LDIR)/*.gch err.txt
+	rm -rf *o $(ODIR)/*.o shell $(LDIR)/*.gch err.txt $(LDIR)/builtins
