@@ -9,9 +9,9 @@ ODIR=obj
 LDIR=include
 SRCDIR=src
 
-all: shell cppcheck
+all: baash cppcheck
 
-shell: $(OBJECTS)
+baash: $(OBJECTS)
 	@echo
 	@echo Linkeando objetos
 	$(CC) $(PATHOBJECTS) -o $@
