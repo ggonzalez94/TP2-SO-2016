@@ -45,4 +45,4 @@ launch.o: $(SRCDIR)/launch.c
 
 clean:
 	@echo Borrando archivos objeto, ksamp compilado y log de errores
-	rm -rf *o $(ODIR)/*.o shell $(LDIR)/*.gch err.txt $(LDIR)/builtins
+	rm -rf *o $(ODIR)/*.o baash $(LDIR)/*.gch err.txt $(LDIR)/builtins
