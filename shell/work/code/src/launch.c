@@ -17,7 +17,19 @@ const char *paths[] = {
   "/usr/games/",
   "/usr/sbin/"
 };
+//Devuelve una copia del ultimo argumento
+char *findLastArgument(char **args){
+  int i = 0 ;
+  while(args[i] != NULL){
+    i++;
+  }
+  char *last = malloc (sizeof(args[i-1]));
+  strcpy(last,args[i-1]);
+  return last;
+}
 
+//Devuelve 1(True) si el path es relativo ("/" no esta en path)
+//Que pasa si la direccion es relativa pero no a la carpeta actual? (Ej : /shell)
 int isRelative(char** path){
 
 	if(strstr(*path,"/")==NULL){
@@ -53,6 +65,8 @@ void resetFlags(){
 
 int launch(char **args)
 {
+  char *lastArgument = strcat(findLastArgument(args),".txt"); // lastArgument + .txt
+  printf("%s\n", lastArgument);
   pid_t pid, wpid;
   int status;
   int i=0;
@@ -75,6 +89,18 @@ int launch(char **args)
   pid = fork();
   if (pid == 0) {
     // Child process
+
+    // Cambio standard output
+    if (flags[OUTP]){
+      FILE *fp;
+      fp = freopen(lastArgument,"w+",stdout);
+      if (fp == NULL){ return -1;} //Si fallo abortar
+    }
+    else if (flags[INPT]){
+      FILE *fp;
+      fp = freopen(lastArgument,"r+",stdin);
+      if (fp == NULL){ return -1;} //Si fallo abortar
+    }
 
   	if (isRelative(args)){
   		char new_str[50] = "";
@@ -107,7 +133,7 @@ int launch(char **args)
 	    do {
 	      wpid = waitpid(pid, &status, WUNTRACED);
 	    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
+	   }
   }
 
   return 1;
