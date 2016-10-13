@@ -23,7 +23,7 @@ char *findLastArgument(char **args){
   while(args[i] != NULL){
     i++;
   }
-  char *last = malloc (sizeof(args[i-1]));
+  char *last = malloc (50*sizeof(args[i-1]));
   strcpy(last,args[i-1]);
   return last;
 }
@@ -65,8 +65,9 @@ void resetFlags(){
 
 int launch(char **args)
 {
-  char *lastArgument = strcat(findLastArgument(args),".txt"); // lastArgument + .txt
-  printf("%s\n", lastArgument);
+  char *lastArgument = findLastArgument(args);
+  // char *lastArgument = strcat(findLastArgument(args),".txt"); // lastArgument + .txt
+  // const char* lastArgument = "a.txt";
   pid_t pid, wpid;
   int status;
   int i=0;
@@ -93,7 +94,7 @@ int launch(char **args)
     // Cambio standard output
     if (flags[OUTP]){
       FILE *fp;
-      fp = freopen(lastArgument,"w+",stdout);
+      fp = freopen(lastArgument,"w",stdout);
       if (fp == NULL){ return -1;} //Si fallo abortar
     }
     else if (flags[INPT]){
@@ -103,7 +104,7 @@ int launch(char **args)
     }
 
   	if (isRelative(args)){
-  		char new_str[50] = "";
+  		char new_str[100] = "";
   		for(int i=0; i<num_paths();i++){
   			strcat(new_str,paths[i]);
   			strcat(new_str,args[0]);
