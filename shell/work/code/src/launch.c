@@ -134,6 +134,11 @@ int launch(char **args)
 	    do {
 	      wpid = waitpid(pid, &status, WUNTRACED);
 	    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+
+      if(wpid == -1){
+        perror("Child process returned -1");
+        exit(EXIT_FAILURE);
+      }
 	   }
   }
 

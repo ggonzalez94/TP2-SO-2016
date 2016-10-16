@@ -23,7 +23,7 @@ int main(int argc, char **argv)
   struct passwd *p = getpwuid(getuid());
 
   char *current_directory = malloc(sizeof(char) * LENGTH_DIRECTORY);
-  getcwd(current_directory,LENGTH_DIRECTORY);
+  current_directory = getcwd(current_directory,LENGTH_DIRECTORY);
 
   // Correr el loop principal
   do {
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
     free(line);
     free(args);
-    getcwd(current_directory,LENGTH_DIRECTORY);
+    current_directory = getcwd(current_directory,LENGTH_DIRECTORY);
   } while (status);
 
 
