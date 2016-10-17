@@ -8,8 +8,9 @@
 #define PIPE 1
 #define INPT 2
 #define OUTP 3
+#define APPEND 4
 
-int flags [4] = {0,0,0,0};
+int flags [5] = {0,0,0,0,0};
 
 const char *paths[] = {
   "/bin/",
@@ -17,19 +18,19 @@ const char *paths[] = {
   "/usr/games/",
   "/usr/sbin/"
 };
+
 //Devuelve una copia del ultimo argumento
 char *findLastArgument(char **args){
   int i = 0 ;
   while(args[i] != NULL){
     i++;
   }
-  char *last = malloc (50*sizeof(args[i-1]));
+  char *last = (char*) malloc (50*sizeof(args[i-1]));
   strcpy(last,args[i-1]);
   return last;
 }
 
 //Devuelve 1(True) si el path es relativo ("/" no esta en path)
-//Que pasa si la direccion es relativa pero no a la carpeta actual? (Ej : /shell)
 int isRelative(char** path){
 
 	if(strstr(*path,"/")==NULL){
@@ -49,9 +50,8 @@ int runCommand(char **args, char *path){
 }
 
 
-int checkFlag(char ch, char* word, int flagIndex){
-
-	if(strcmp(&ch,word)==0){
+int checkFlag(char* ch, char* word, int flagIndex){
+	if(strcmp(ch,word)==0){
   		flags[flagIndex]++;
   		return 0;
   	}
@@ -59,26 +59,31 @@ int checkFlag(char ch, char* word, int flagIndex){
 }
 
 void resetFlags(){
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 5; ++i)
 		flags[i]=0;
 }
 
 int launch(char **args)
 {
   char *lastArgument = findLastArgument(args);
-  // char *lastArgument = strcat(findLastArgument(args),".txt"); // lastArgument + .txt
-  // const char* lastArgument = "a.txt";
   pid_t pid, wpid;
   int status;
   int i=0;
 
   resetFlags();
 
-  char caracter[5]= "&|<>";
+  // char caracter[5]= "&|<>";
+  
+  char *caracter[5];
+  caracter[0] = "&";
+  caracter[1] = "|";
+  caracter[2] = "<";
+  caracter[3] = ">";
+  caracter[4] = ">>";
 
   while(args[i]!=NULL){
 
-  	for(int j=0; j<4; j++){
+  	for(int j=0; j<5; j++){
 	  	if(checkFlag(caracter[j],args[i],j)==0){
 	  		args[i]=NULL;
 	  		break;
@@ -92,12 +97,17 @@ int launch(char **args)
     // Child process
 
     // Cambio standard output
+    if (flags[APPEND]){
+      FILE *fp;
+      fp = freopen(lastArgument,"a",stdout);
+      if (fp == NULL){ return -1;} //Si fallo abortar
+    }
     if (flags[OUTP]){
       FILE *fp;
       fp = freopen(lastArgument,"w",stdout);
       if (fp == NULL){ return -1;} //Si fallo abortar
     }
-    else if (flags[INPT]){
+    if (flags[INPT]){
       FILE *fp;
       fp = freopen(lastArgument,"r+",stdin);
       if (fp == NULL){ return -1;} //Si fallo abortar
@@ -121,7 +131,9 @@ int launch(char **args)
 		perror("Baash error");
 	    exit(EXIT_FAILURE);
   	}
-  } 
+  }
+
+
   else if (pid < 0) {
     // Error forking
     perror("Baash error forking");
@@ -139,7 +151,7 @@ int launch(char **args)
         perror("Child process returned -1");
         exit(EXIT_FAILURE);
       }
-	   }
+	}
   }
 
   return 1;
