@@ -6,9 +6,40 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <string.h>
 
 #include "../include/main_includes.h"
 #include "../include/colores.h"
+
+char* path[50];
+
+int splitPath (char** path)
+{
+  char* fullPath;
+  fullPath = getenv ("PATH");
+  if(fullPath == NULL)
+    return -1;
+  char *pathAux = (char *)malloc(strlen(fullPath) + 1);
+  strcpy(pathAux,fullPath);
+
+    path[0] = strtok(pathAux,":");
+    printf("%s\n", pathAux);
+    printf("\n\n\n%s\n",fullPath );
+
+    int i=0;
+    while(path[i] != NULL){
+      i++;
+      path[i] = strtok(NULL,":");
+    }
+  
+  for (int i = 0; i < 50; ++i)
+  { 
+    if(path[i] != NULL)
+      printf("%s\n",path[i]);
+  }
+  
+  return 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -17,12 +48,14 @@ int main(int argc, char **argv)
   char **args;
   int status;
 
-  char *host_name = malloc(sizeof(char) * LENGTH_HOSTNAME);
+  splitPath(path);
+
+  char *host_name = (char*)malloc(sizeof(char) * LENGTH_HOSTNAME);
   gethostname(host_name,LENGTH_HOSTNAME);
 
   struct passwd *p = getpwuid(getuid());
 
-  char *current_directory = malloc(sizeof(char) * LENGTH_DIRECTORY);
+  char *current_directory = (char*)malloc(sizeof(char) * LENGTH_DIRECTORY);
   current_directory = getcwd(current_directory,LENGTH_DIRECTORY);
 
   // Correr el loop principal
@@ -34,7 +67,7 @@ int main(int argc, char **argv)
     printf("> "RESET);
     line = read_line();
     args = split_line(line);
-    status = execute(args);
+    status = execute(args, path);
 
     free(line);
     free(args);

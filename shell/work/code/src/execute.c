@@ -5,7 +5,9 @@
 #include "../include/execute.h"
 #include "../include/builtins.h"
 
-int execute(char **args)
+
+
+int execute(char **args, char **path)
 {
   int i;
 
@@ -14,18 +16,12 @@ int execute(char **args)
     return 1;
   }
 
-  // for (i = 0; i < lsh_num_builtins(); i++) {
-  //   if (strcmp(args[0], builtin_str[i]) == 0) {
-  //     return (*builtin_func[i])(args);
-  //   }
-  // }
-
   for (i = 0; i < lsh_num_builtins(); i++) {
      if (is_builtin(args,i)) {
        return execute_builtin(args,i);
      }
   }
 
-  return launch(args);
+  return launch(args, path);
 }
 

@@ -6,7 +6,14 @@
 
 #include "../include/launch.h"
 
-int launch(char **args)
+const char *paths[] = {
+  "/bin/",
+  "/usr/bin/",
+  "/usr/games/",
+  "/usr/sbin/"
+};
+
+int launch(char **args, char **path)
 {
   char *lastArgument = findLastArgument(args);
   pid_t pid, wpid;
@@ -37,7 +44,6 @@ int launch(char **args)
   switch(pid){
   	case 0: 
     // Child process
-
     
 	    // Cambio standard input/output
 	    if (flags[APPEND]){
@@ -55,10 +61,12 @@ int launch(char **args)
 
 	  	if (isRelative(args)){
 	  		char new_str[100] = "";
-	  		for(int i=0; i<num_paths();i++){
-	  			strcat(new_str,paths[i]);
-	  			strcat(new_str,args[0]);
-	  			runCommand(args,new_str);
+	  		for(int i=0; i<20;i++){
+
+	  				strcat(new_str,path[i]);
+	  				strcat(new_str,"/");
+	  				strcat(new_str, args[0]);
+	  				runCommand(args,new_str);
 
 	  			//limpio el string para probar de nuevo
 	  			new_str[0] = 0;
@@ -123,10 +131,6 @@ int isRelative(char** path){
 		return 1;
 	}
 	return 0;
-}
-
-int num_paths() {
-  return sizeof(paths) / sizeof(char *);
 }
 
 int runCommand(char **args, char *path){
