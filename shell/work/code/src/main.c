@@ -23,20 +23,11 @@ int splitPath (char** path)
   strcpy(pathAux,fullPath);
 
     path[0] = strtok(pathAux,":");
-    printf("%s\n", pathAux);
-    printf("\n\n\n%s\n",fullPath );
-
     int i=0;
     while(path[i] != NULL){
       i++;
       path[i] = strtok(NULL,":");
     }
-  
-  for (int i = 0; i < 50; ++i)
-  { 
-    if(path[i] != NULL)
-      printf("%s\n",path[i]);
-  }
   
   return 0;
 }
