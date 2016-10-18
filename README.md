@@ -77,11 +77,18 @@ Para redirigir la salida se utiliza el caracter `>` seguido del nombre del archi
 % ls > files.txt
 ```
 
-Este comando crea un archivo llamado `files.txt`, que contiene la salida del programa `ls`. También pueden incluirse comandos del programa al redirigir la salida standard. Ej:
+Este comando crea un archivo llamado `files.txt`, que contiene la salida del programa `ls`. Aquí se sobreescribe el archivo si ya existiese, y se borra el contenido anterior en el mismo. También pueden incluirse comandos del programa al redirigir la salida standard. Ej:
 
 ```
-% ls - i > files.txt
+% ls -i > files.txt
 ```
+
+Como alternativa puede anexarse información al final del archivo, si ya existiese (append), con el operador `>>`. Ej:
+
+```
+% ps >> files.txt
+```
+Esta instrucción agrega al final del archivo `files.txt` la salida del comando ps.
 
 Para redirigir la entrada se utiliza el caracter `<` seguido del nombre del archivo de donde se quiere leer información. Ej:
 
@@ -126,4 +133,3 @@ Al compilar y linkear, se genera un archivo donde se guardan los posibles errore
 shell/work/code/err.txt
 ```
 Si desea más información, remítase a la documentación proporcionada, que se encuentra en la ruta ```/shell/doc/html/index.html```
-
