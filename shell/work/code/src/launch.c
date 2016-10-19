@@ -6,20 +6,20 @@
 
 #include "../include/launch.h"
 
-const char *paths[] = {
-  "/bin/",
-  "/usr/bin/",
-  "/usr/games/",
-  "/usr/sbin/"
-};
+void splitArgs(char** args, int flag_index, char** inst1, char** inst2);
+void crearNieto(int file_desc[], char** inst2);
+
 
 int launch(char **args, char **path)
 {
   char *lastArgument = findLastArgument(args);
   pid_t pid, wpid;
   int status;
-  int i=0;
+  int i=0, j=0;
   int changeStdIOResult;
+  int file_desc[2];
+  char** inst1 = (char**)malloc(20 * sizeof(char*));
+  char** inst2 = (char**)malloc(20 * sizeof(char*));
 
   resetFlags();
   
@@ -29,32 +29,56 @@ int launch(char **args, char **path)
   caracter[3] = ">";
   caracter[4] = ">>";
 
-  while(args[i]!=NULL){
+  int cant_flags = 0;
+  int flag_index;
 
+  //cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
+  while(args[i]!=NULL){
   	for(int j=0; j<5; j++){
 	  	if(checkFlag(caracter[j],args[i],j)==0){
-	  		args[i]=NULL;
-	  		break;
+	  		flags[j]++;
+	  		cant_flags++;
+	  		flag_index = i;
 	  	}
 	}
   	i++;
+  	if(args[i]==NULL && cant_flags ==0)
+  		flag_index=i;
   }
+
+  if(cant_flags>1){
+  	printf("Error, puede procesarse solo un caracter especial por instruccion\n");
+  	exit(EXIT_FAILURE);
+  }
+
+  splitArgs(args,flag_index,inst1, inst2);
+  
+
+	if (flags[PIPE]){
+		if(pipe(file_desc) == -1) {
+			perror("Pipe failed");
+			exit(1);
+		}
+	}
 
   pid = fork();
   switch(pid){
   	case 0: 
     // Child process
-    
+  		if(flags[PIPE]){
+  			crearNieto(file_desc,inst2);
+  		}
+
 	    // Cambio standard input/output
-	    if (flags[APPEND]){
+	    else if (flags[APPEND]){
 	    	if((changeStdIOResult = changeStdIO(lastArgument,"a",stdout)) == -1)
 	    		exit(EXIT_FAILURE);
 	    }
-	    if (flags[OUTP]){
+	    else if (flags[OUTP]){
 	    	if((changeStdIOResult = changeStdIO(lastArgument,"w",stdout)) == -1)
 	    		exit(EXIT_FAILURE);
 	    }
-	    if (flags[INPT]){
+	    else if (flags[INPT]){
 	    	if((changeStdIOResult = changeStdIO(lastArgument,"r+",stdin)) == -1)
 	    		exit(EXIT_FAILURE);
 	    }
@@ -62,11 +86,10 @@ int launch(char **args, char **path)
 	  	if (isRelative(args)){
 	  		char new_str[100] = "";
 	  		for(int i=0; i<20;i++){
-
-	  				strcat(new_str,path[i]);
-	  				strcat(new_str,"/");
-	  				strcat(new_str, args[0]);
-	  				runCommand(args,new_str);
+				strcat(new_str,path[i]);
+				strcat(new_str,"/");
+				strcat(new_str, inst1[0]);
+				runCommand(inst1,new_str);
 
 	  			//limpio el string para probar de nuevo
 	  			new_str[0] = 0;
@@ -90,9 +113,18 @@ int launch(char **args, char **path)
     default:
     // Parent process
   		if(flags[AMP] == 0){
-		    do {
-		      wpid = waitpid(pid, &status, WUNTRACED);
-		    } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+  			if(flags[PIPE]){
+	  			close(file_desc[0]);
+		        close(file_desc[1]);
+		        wait(0);
+		        wait(0);
+		    }
+		    else{
+		    	wait(0);
+		    }
+		    // do {
+		    //   wpid = waitpid(pid, &status, WUNTRACED);
+		    // } while (!WIFEXITED(status) && !WIFSIGNALED(status));
 
 	      if(wpid == -1){
 	        perror("Child process returned -1");
@@ -141,7 +173,6 @@ int runCommand(char **args, char *path){
 
 int checkFlag(const char* ch, char* word, int flagIndex){
 	if(strcmp(ch,word)==0){
-  		flags[flagIndex]++;
   		return 0;
   	}
   	return -1;
@@ -150,4 +181,49 @@ int checkFlag(const char* ch, char* word, int flagIndex){
 void resetFlags(){
 	for (int i = 0; i < 5; ++i)
 		flags[i]=0;
+}
+
+void splitArgs(char** args, int flag_index, char** inst1, char** inst2){
+	int i=0, j=0;
+	while(args[i]!=NULL){
+		if(i<flag_index){
+			inst1[i] = args[i];
+		}
+
+		if(i==flag_index){
+			inst1[i]=NULL;
+		}
+
+		if(i>flag_index){
+			inst2[j] = args[i];
+			j++;
+		}
+
+		i++;
+
+		if(args[i]==NULL){
+			inst2[j]=NULL;
+		}
+	}
+}
+
+void crearNieto(int file_desc[], char** inst2){
+	//nieto
+	if(fork() == 0)            //creating 2nd child
+	{
+		close(STDIN_FILENO);   //closing stdin
+		dup(file_desc[0]);         //replacing stdin with pipe read
+		close(file_desc[1]);       //closing pipe write
+		close(file_desc[0]);
+
+		// const char* prog1[] = { "ls", "-l", 0};
+		execvp(inst2[0], inst2);
+		perror("execvp of ls failed");
+		exit(1);
+	}
+
+	close(STDOUT_FILENO);  //closing stdout
+	dup(file_desc[1]);         //replacing stdout with pipe write 
+	close(file_desc[0]);       //closing pipe read
+	close(file_desc[1]);
 }
