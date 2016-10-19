@@ -28,6 +28,7 @@ int splitPath (char** path)
       i++;
       path[i] = strtok(NULL,":");
     }
+    free(pathAux);
   
   return 0;
 }
@@ -55,10 +56,10 @@ int main(int argc, char **argv)
     printf(BOLDMAGENTA "%s@", p->pw_name);
     printf("%s: " RESET,host_name);
     printf(BOLDGREEN"%s",current_directory);
-    printf("> "RESET);
+    printf("> " RESET);
     line = read_line();
     args = split_line(line);
-    status = execute(args, path);
+    status = execute(args);
 
     free(line);
     free(args);

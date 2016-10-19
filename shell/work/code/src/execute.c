@@ -5,9 +5,9 @@
 #include "../include/execute.h"
 #include "../include/builtins.h"
 
+extern char* path[50];
 
-
-int execute(char **args, char **path)
+int execute(char **args)
 {
   int i;
 
@@ -22,6 +22,6 @@ int execute(char **args, char **path)
      }
   }
 
-  return launch(args, path);
+  return launch(args);
 }
 

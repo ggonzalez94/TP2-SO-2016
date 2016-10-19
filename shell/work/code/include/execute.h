@@ -1,1 +1,1 @@
-int launch(char **args, char **path);
+int launch(char **args);

@@ -6,16 +6,19 @@
 
 #include "../include/launch.h"
 
-void splitArgs(char** args, int flag_index, char** inst1, char** inst2);
-void crearNieto(int file_desc[], char** inst2);
+extern char* path[50];
 
+void splitArgs(char** args, int flag_index, char** inst1, char** inst2);
+void crearNieto(int file_desc[], char** inst2, char** path);
+void execvp2(char** args);
 
 int launch(char **args, char **path)
 {
-  char *lastArgument = findLastArgument(args);
-  pid_t pid, wpid;
-  int status;
-  int i=0, j=0;
+  char *lastArgument = (char*)malloc(20 * sizeof(char*));
+  lastArgument = findLastArgument(args);
+  pid_t pid;//, wpid;
+  // int status;
+  int i=0;
   int changeStdIOResult;
   int file_desc[2];
   char** inst1 = (char**)malloc(20 * sizeof(char*));
@@ -30,7 +33,7 @@ int launch(char **args, char **path)
   caracter[4] = ">>";
 
   int cant_flags = 0;
-  int flag_index;
+  int flag_index=0;
 
   //cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
   while(args[i]!=NULL){
@@ -48,7 +51,9 @@ int launch(char **args, char **path)
 
   if(cant_flags>1){
   	printf("Error, puede procesarse solo un caracter especial por instruccion\n");
-  	exit(EXIT_FAILURE);
+  	free(inst1);
+  	free(inst2);
+  	return 0;
   }
 
   splitArgs(args,flag_index,inst1, inst2);
@@ -66,7 +71,7 @@ int launch(char **args, char **path)
   	case 0: 
     // Child process
   		if(flags[PIPE]){
-  			crearNieto(file_desc,inst2);
+  			crearNieto(file_desc,inst2, path);
   		}
 
 	    // Cambio standard input/output
@@ -83,25 +88,9 @@ int launch(char **args, char **path)
 	    		exit(EXIT_FAILURE);
 	    }
 
-	  	if (isRelative(args)){
-	  		char new_str[100] = "";
-	  		for(int i=0; i<20;i++){
-				strcat(new_str,path[i]);
-				strcat(new_str,"/");
-				strcat(new_str, inst1[0]);
-				runCommand(inst1,new_str);
+	    execvp2(inst1);
+	
 
-	  			//limpio el string para probar de nuevo
-	  			new_str[0] = 0;
-	  		}
-	  		perror("Baash error executing command");
-	  		exit(EXIT_FAILURE);
-	  	}
-
-	  	else if(runCommand(args,args[0]) == -1){
-			perror("Baash error executing command");
-		    exit(EXIT_FAILURE);
-	  	}
 	  	break;
 
   	case -1:
@@ -126,10 +115,10 @@ int launch(char **args, char **path)
 		    //   wpid = waitpid(pid, &status, WUNTRACED);
 		    // } while (!WIFEXITED(status) && !WIFSIGNALED(status));
 
-	      if(wpid == -1){
-	        perror("Child process returned -1");
-	        exit(EXIT_FAILURE);
-	      }
+	      // if(wpid == -1){
+	      //   perror("Child process returned -1");
+	      //   exit(EXIT_FAILURE);
+	      // }
 		}
 	}
 	
@@ -207,23 +196,39 @@ void splitArgs(char** args, int flag_index, char** inst1, char** inst2){
 	}
 }
 
-void crearNieto(int file_desc[], char** inst2){
+void crearNieto(int file_desc[], char** inst2, char** path){
 	//nieto
 	if(fork() == 0)            //creating 2nd child
 	{
-		close(STDIN_FILENO);   //closing stdin
-		dup(file_desc[0]);         //replacing stdin with pipe read
+		dup2(file_desc[0],STDIN_FILENO);
 		close(file_desc[1]);       //closing pipe write
 		close(file_desc[0]);
-
-		// const char* prog1[] = { "ls", "-l", 0};
-		execvp(inst2[0], inst2);
-		perror("execvp of ls failed");
-		exit(1);
+		execvp2(inst2);
 	}
 
-	close(STDOUT_FILENO);  //closing stdout
-	dup(file_desc[1]);         //replacing stdout with pipe write 
+	dup2(file_desc[1],STDOUT_FILENO);
 	close(file_desc[0]);       //closing pipe read
 	close(file_desc[1]);
 }
+
+void execvp2(char** args){
+	  	if (isRelative(args)){
+	  		char new_str[100] = "";
+	  		for(int i=0; i<20;i++){
+				strcat(new_str,path[i]);
+				strcat(new_str,"/");
+				strcat(new_str, args[0]);
+				runCommand(args,new_str);
+
+	  			//limpio el string para probar de nuevo
+	  			new_str[0] = 0;
+	  		}
+	  		perror("Baash error executing command");
+	  		exit(EXIT_FAILURE);
+	  	}
+
+	  	else if(runCommand(args,args[0]) == -1){
+			perror("Baash error executing command");
+		    exit(EXIT_FAILURE);
+	  	}
+	}
