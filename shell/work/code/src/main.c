@@ -28,7 +28,6 @@ int splitPath (char** path)
       i++;
       path[i] = strtok(NULL,":");
     }
-    free(pathAux);
   
   return 0;
 }
