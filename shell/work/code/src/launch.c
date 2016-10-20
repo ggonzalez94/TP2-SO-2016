@@ -14,8 +14,6 @@ void execvp2(char** args);
 
 int launch(char **args)
 {
-  char *lastArgument = (char*)malloc(20 * sizeof(char*));
-  lastArgument = findLastArgument(args);
   pid_t pid;//, wpid;
   // int status;
   int i=0;
@@ -73,20 +71,27 @@ int launch(char **args)
   		if(flags[PIPE]){
   			crearNieto(file_desc,inst2, path);
   		}
+      else{
+        // Cambio standard input/output
+        char *lastArgument = (char*)malloc(20 * sizeof(char*));
+        findLastArgument(args,lastArgument);
 
-	    // Cambio standard input/output
-	    else if (flags[APPEND]){
-	    	if((changeStdIOResult = changeStdIO(lastArgument,"a",stdout)) == -1)
-	    		exit(EXIT_FAILURE);
-	    }
-	    else if (flags[OUTP]){
-	    	if((changeStdIOResult = changeStdIO(lastArgument,"w",stdout)) == -1)
-	    		exit(EXIT_FAILURE);
-	    }
-	    else if (flags[INPT]){
-	    	if((changeStdIOResult = changeStdIO(lastArgument,"r+",stdin)) == -1)
-	    		exit(EXIT_FAILURE);
-	    }
+        if (flags[APPEND]){
+          if((changeStdIOResult = changeStdIO(lastArgument,"a",stdout)) == -1)
+            exit(EXIT_FAILURE);
+        }
+        if (flags[OUTP]){
+          if((changeStdIOResult = changeStdIO(lastArgument,"w",stdout)) == -1)
+            exit(EXIT_FAILURE);
+        }
+        if (flags[INPT]){
+          if((changeStdIOResult = changeStdIO(lastArgument,"r+",stdin)) == -1)
+            exit(EXIT_FAILURE);
+        }
+        free(lastArgument);
+      }
+
+
 
 	    execvp2(inst1);
 	
@@ -135,14 +140,12 @@ int changeStdIO(char* lastArgument, const char* mode, FILE *stream){
     }
 
 //Devuelve una copia del ultimo argumento
-char *findLastArgument(char **args){
+void findLastArgument(char **args,char *lastArgument){
   int i = 0 ;
   while(args[i] != NULL){
     i++;
   }
-  char *last = (char*) malloc (50*sizeof(args[i-1]));
-  strcpy(last,args[i-1]);
-  return last;
+  strcpy(lastArgument,args[i-1]);
 }
 
 //Devuelve 1(True) si el path es relativo ("/" no esta en path)

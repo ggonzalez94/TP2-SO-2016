@@ -8,7 +8,7 @@ int flags [5] = {0,0,0,0,0};
 char const *caracter[5];
 
 int changeStdIO(char* lastArgument, const char* mode, FILE *stream);
-char *findLastArgument(char **args);
+void findLastArgument(char **args,char *lastArgument);
 int isRelative(char** path);
 int runCommand(char **args, char *path);
 int checkFlag(const char* ch, char* word, int flagIndex);
