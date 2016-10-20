@@ -10,7 +10,7 @@ ___
 
 ## 1. Descripción del programa
 ---
-El programa Baash es un intérprete de línea de comandos, que se ejecuta sobre el shell nativo de Linux, y permite ejecutar diversas instrucciones, incluídas en el sistema operativo, o propios del programa.
+El programa **Baash** es un **intérprete de línea de comandos**, que se ejecuta sobre el shell nativo de Linux, y permite ejecutar diversas instrucciones, incluídas en el sistema operativo, o propios del programa.
 
 Sus comandos internos son:
 
@@ -65,7 +65,12 @@ Para que esta función se pueda ver claramente, se incluye en el repositorio una
 % ./ksamp -l 3 30
 ```
 Al ejecutar la primer línea, se mostrará información con un tiempo de refresco de 1 segundo. 
-Luego de ingresar la segunda línea, también se mostrará cada 3 segundos, y podrá verse como se intercalan las impresiones de los dos programas.
+Luego de ingresar la segunda línea, también se mostrará cada 3 segundos, y podrá verse como se intercalan las impresiones de los dos programas. Otros ejemplos:
+
+```
+% ./ksamp -l 1 30 %
+% ps -A
+```
 
 ### Redirección de entrada / salida:
 
@@ -99,6 +104,20 @@ Este comando muestra la cantidad de caracteres en el archivo files.txt
 
 ### Uso de pipes
 
+El programa permite el uso de pipes entre procesos, al usar el caracter `|`. Este mecanismo permite **redirigir la salida standard** de un proceso **hacia la entrada standard** de otro, para encadenar instrucciones y obtener resultados muy interesantes.
+Solo se permite el uso de un pipe por instrucción ingresada.
+Por ejemplo, al ingresar el siguiente comando:
+
+```
+% ps -A | grep baash
+```
+Se podrá ver el **process ID** del proceso Baash, al encadenar `ps -A`, que lista todos los procesos en ejecución, y el comando `grep baash`, que busca en su entrada standard la cadena 'baash', mostrando por consola el resultado.
+
+Otros ejemplos de uso son:
+```
+% ls | wc -l
+% top | grep Tasks
+```
 
 ## 2. Instrucciones de instalación
 ---
