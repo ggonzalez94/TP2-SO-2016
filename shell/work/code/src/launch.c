@@ -12,7 +12,7 @@ void splitArgs(char** args, int flag_index, char** inst1, char** inst2);
 void crearNieto(int file_desc[], char** inst2, char** path);
 void execvp2(char** args);
 
-int launch(char **args, char **path)
+int launch(char **args)
 {
   char *lastArgument = (char*)malloc(20 * sizeof(char*));
   lastArgument = findLastArgument(args);
@@ -53,7 +53,7 @@ int launch(char **args, char **path)
   	printf("Error, puede procesarse solo un caracter especial por instruccion\n");
   	free(inst1);
   	free(inst2);
-  	return 0;
+  	return 1;
   }
 
   splitArgs(args,flag_index,inst1, inst2);
@@ -155,8 +155,9 @@ int isRelative(char** path){
 }
 
 int runCommand(char **args, char *path){
-  	if (execv(path, args) == -1) 
+  	if (execv(path, args) == -1) {
     	return -1;
+  	}
     return 0;
 }
 
@@ -214,7 +215,7 @@ void crearNieto(int file_desc[], char** inst2, char** path){
 void execvp2(char** args){
 	  	if (isRelative(args)){
 	  		char new_str[100] = "";
-	  		for(int i=0; i<20;i++){
+	  		for(int i=0; i<15;i++){
 				strcat(new_str,path[i]);
 				strcat(new_str,"/");
 				strcat(new_str, args[0]);

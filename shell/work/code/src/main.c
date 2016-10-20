@@ -19,10 +19,8 @@ int splitPath (char** path)
   fullPath = getenv ("PATH");
   if(fullPath == NULL)
     return -1;
-  char *pathAux = (char *)malloc(strlen(fullPath) + 1);
-  strcpy(pathAux,fullPath);
 
-    path[0] = strtok(pathAux,":");
+    path[0] = strtok(fullPath,":");
     int i=0;
     while(path[i] != NULL){
       i++;
@@ -64,7 +62,6 @@ int main(int argc, char **argv)
     free(args);
     current_directory = getcwd(current_directory,LENGTH_DIRECTORY);
   } while (status);
-
 
   return EXIT_SUCCESS;
 }
