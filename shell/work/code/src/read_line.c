@@ -1,6 +1,22 @@
+/** @file read_line.c
+ *  @brief Lee una linea ingresada por consola luego de un Enter.
+ *
+ *  Detecta el comando ingresado en la consola, y lo guarda en un arreglo de chars.
+ *
+ *  @author Facundo Maero
+ *  @author Gustavo Gonzalez
+ */
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+  /**
+  * @brief Lee una linea ingresada por consola luego de un Enter.
+  * Detecta el comando ingresado en la consola, y lo guarda en un arreglo de chars.
+  * 
+  * @return line Un arreglo de chars con la cadena de caracteres ingresada
+  */
 
 char *read_line(void)
 {
