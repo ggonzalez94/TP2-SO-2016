@@ -8,44 +8,19 @@
 
 extern char* path[50];
 
-void splitArgs(char** args, int flag_index, char** inst1, char** inst2);
-void crearNieto(int file_desc[], char** inst2, char** path);
-void execvp2(char** args);
 
 int launch(char **args)
 {
   pid_t pid;//, wpid;
   // int status;
-  int i=0;
   int changeStdIOResult;
   int file_desc[2];
   char** inst1 = (char**)malloc(20 * sizeof(char*));
   char** inst2 = (char**)malloc(20 * sizeof(char*));
 
   resetFlags();
-  
-  caracter[0] = "&";
-  caracter[1] = "|";
-  caracter[2] = "<";
-  caracter[3] = ">";
-  caracter[4] = ">>";
-
-  int cant_flags = 0;
-  int flag_index=0;
-
-  //cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
-  while(args[i]!=NULL){
-  	for(int j=0; j<5; j++){
-	  	if(checkFlag(caracter[j],args[i],j)==0){
-	  		flags[j]++;
-	  		cant_flags++;
-	  		flag_index = i;
-	  	}
-	}
-  	i++;
-  	if(args[i]==NULL && cant_flags ==0)
-  		flag_index=i;
-  }
+  int flag_index = 0;
+  int cant_flags = countFlags(args,&flag_index);
 
   if(cant_flags>1){
   	printf("Error, puede procesarse solo un caracter especial por instruccion\n");
@@ -235,4 +210,24 @@ void execvp2(char** args){
 			perror("Baash error executing command");
 		    exit(EXIT_FAILURE);
 	  	}
-	}
+}
+
+//Devuelve el numero de flags presentes y escribe en flag_index donde se encuentra dicho flag
+int countFlags(char **args,int *flag_index){
+  int cant_flags = 0;
+  int i=0;
+  //cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
+  while(args[i]!=NULL){
+    for(int j=0; j<5; j++){
+      if(checkFlag(caracter[j],args[i],j)==0){
+        flags[j]++;
+        cant_flags++;
+        *flag_index = i;
+      }
+  }
+    i++;
+    if(args[i]==NULL && cant_flags ==0)
+      *flag_index=i;
+  }
+  return cant_flags;
+}
