@@ -5,8 +5,9 @@
 #include <string.h>
 
 #include "../include/launch.h"
+#include "../include/shared.h"
 
-extern char* path[50];
+extern char* path[PATH_MAX];
 
 
 int launch(char **args)
@@ -15,8 +16,8 @@ int launch(char **args)
   // int status;
   int changeStdIOResult;
   int file_desc[2];
-  char** inst1 = (char**)malloc(20 * sizeof(char*));
-  char** inst2 = (char**)malloc(20 * sizeof(char*));
+  char** inst1 = (char**)malloc(STANDARD_BUFFER * sizeof(char*));
+  char** inst2 = (char**)malloc(STANDARD_BUFFER * sizeof(char*));
 
   resetFlags();
   int flag_index = 0;
@@ -193,20 +194,24 @@ void crearNieto(int file_desc[], char** inst2, char** path){
 void execvp2(char** args){
 	  	if (isRelative(args)){
 	  		char new_str[100] = "";
-	  		for(int i=0; i<15;i++){
-				strcat(new_str,path[i]);
+	  		int i = 0;
+	  		while (path[i] != NULL){
+	  			strcat(new_str,path[i]);
 				strcat(new_str,"/");
 				strcat(new_str, args[0]);
 				runCommand(args,new_str);
 
 	  			//limpio el string para probar de nuevo
 	  			new_str[0] = 0;
+	  			i++;
 	  		}
+	  		//Si no se encontro el comando imprimo el error
 	  		perror("Baash error executing command");
 	  		exit(EXIT_FAILURE);
 	  	}
 
 	  	else if(runCommand(args,args[0]) == -1){
+	  		//Si retorna es porque hubo un error
 			perror("Baash error executing command");
 		    exit(EXIT_FAILURE);
 	  	}
@@ -218,7 +223,7 @@ int countFlags(char **args,int *flag_index){
   int i=0;
   //cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
   while(args[i]!=NULL){
-    for(int j=0; j<5; j++){
+    for(int j=0; j<TOTAL_FLAGS; j++){
       if(checkFlag(caracter[j],args[i],j)==0){
         flags[j]++;
         cant_flags++;

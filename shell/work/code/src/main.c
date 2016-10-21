@@ -10,8 +10,9 @@
 
 #include "../include/main_includes.h"
 #include "../include/colores.h"
+#include "../include/shared.h"
 
-char* path[50];
+char* path[PATH_MAX];
 
 int splitPath (char** path)
 {

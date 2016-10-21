@@ -9,14 +9,16 @@
  *  @author Gustavo Gonzalez
  */
 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "../include/execute.h"
 #include "../include/builtins.h"
+#include "../include/shared.h"
 
-extern char* path[50];
+extern char* path[PATH_MAX];
 
   /**
   * @brief Ejecuta la instrucción ingresada.

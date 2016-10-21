@@ -3,6 +3,8 @@
 #define INPT 2
 #define OUTP 3
 #define APPEND 4
+#define TOTAL_FLAGS 5
+#define STANDARD_BUFFER 20
 
 int flags [5] = {0,0,0,0,0};
 char const *caracter[5] = {"&","|","<",">",">>"};
