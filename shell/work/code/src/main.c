@@ -1,3 +1,13 @@
+/** @file main.c
+ *  @brief Funcion principal del programa Baash.
+ *
+ *  Funcion principal del programa, que contiene el bucle principal
+ *  y espera una entrada de teclado por parte del usuario.
+ *
+ *  @author Facundo Maero
+ *  @author Gustavo Gonzalez
+ */
+
 #define LENGTH_HOSTNAME 25
 #define LENGTH_DIRECTORY 111
 
@@ -13,6 +23,17 @@
 #include "../include/shared.h"
 
 char* path[PATH_MAX];
+
+  /**
+  * @brief Parsea el PATH del sistema 
+  * Separa el contenido de la variable PATH del sistema en sus distintas rutas.
+  * Las mismas son separadas con el delimitador ":". 
+  * Los tokens parseados son asignados a un arreglo de punteros a chars, variable global
+  * solo modificada en este punto, y utilizada a lo largo de todo el programa.
+  *
+  * @param path una cadena de caracteres con el PATH del sistema. 
+  * @return 0 caso exitoso, -1 si no se encontro el PATH.
+  */
 
 int splitPath (char** path)
 {
@@ -32,6 +53,14 @@ int splitPath (char** path)
   
   return 0;
 }
+
+  /**
+  * @brief Principal funcion del programa.
+  * 
+  * Parsea el PATH del sistema, lee lineas de comandos ingresadas por consola y
+  * maneja el loop principal del programa, imprimiendo el command prompt y esperando
+  * una nueva instruccion del usuario.
+  */
 
 int main(int argc, char **argv)
 {
