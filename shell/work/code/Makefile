@@ -22,7 +22,7 @@ cppcheck:
 	@echo Los resultados de la misma se encuentran en err.txt
 	cppcheck . 2> err.txt
 
-main.o: $(SRCDIR)/main.c $(LDIR)/main_includes.h $(LDIR)/colores.h
+main.o: $(SRCDIR)/main.c $(LDIR)/main_includes.h $(LDIR)/colores.h $(LDIR)/shared.h
 	@echo
 	@echo Compilando codigos fuente
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
@@ -33,13 +33,13 @@ split_line.o: $(SRCDIR)/split_line.c
 read_line.o: $(SRCDIR)/read_line.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-execute.o: $(SRCDIR)/execute.c $(LDIR)/builtins.h $(LDIR)/launch.h
+execute.o: $(SRCDIR)/execute.c $(LDIR)/builtins.h $(LDIR)/launch.h $(LDIR)/shared.h
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
 
 builtins.o: $(SRCDIR)/builtins.c
 	$(CC) $(CFLAGS) $^ -o $(ODIR)/$@
 
-launch.o: $(SRCDIR)/launch.c
+launch.o: $(SRCDIR)/launch.c $(LDIR)/shared.h $(LDIR)/launch.h
 	$(CC) $(CFLAGS) $< -o $(ODIR)/$@
 
 

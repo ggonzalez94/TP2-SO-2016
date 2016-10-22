@@ -34,27 +34,24 @@ extern char* path[PATH_MAX];
 
 int launch(char **args)
 {
-  pid_t pid;//, wpid;
-  // int status;
-  int changeStdIOResult;
-  int file_desc[2];
-  char** inst1 = (char**)malloc(STANDARD_BUFFER * sizeof(char*));
-  char** inst2 = (char**)malloc(STANDARD_BUFFER * sizeof(char*));
+	pid_t pid;
+	int file_desc[2];
+	char** inst1 = (char**)malloc(STANDARD_BUFFER * sizeof(char*));
+	char** inst2 = (char**)malloc(STANDARD_BUFFER * sizeof(char*));
 
-  resetFlags();
-  int flag_index = 0;
-  int cant_flags = countFlags(args,&flag_index);
+	resetFlags();
+	int flag_index = 0;
+	int cant_flags = countFlags(args,&flag_index);
 
-  if(cant_flags>1){
-  	printf("Error, puede procesarse solo un caracter especial por instruccion\n");
-  	free(inst1);
-  	free(inst2);
-  	return 1;
-  }
+	if(cant_flags>1){
+		printf("Error, puede procesarse solo un caracter especial por instruccion\n");
+		free(inst1);
+		free(inst2);
+		return 1;
+	}
 
-  splitArgs(args,flag_index,inst1, inst2);
+  	splitArgs(args,flag_index,inst1, inst2);
   
-
 	if (flags[PIPE]){
 		if(pipe(file_desc) == -1) {
 			perror("Pipe failed");
@@ -62,69 +59,59 @@ int launch(char **args)
 		}
 	}
 
-  pid = fork();
-  switch(pid){
-  	case 0: 
-    // Child process
-  		if(flags[PIPE]){
-  			crearNieto(file_desc,inst2);
-  		}
-      else{
-        // Cambio standard input/output
-        char *lastArgument = (char*)malloc(20 * sizeof(char*));
-        findLastArgument(args,lastArgument);
+	pid = fork();
+	switch(pid){
+		case 0: 
+			// Child process
+			if(flags[PIPE]){
+				crearNieto(file_desc,inst2);
+			}
+			
+			else{
+			// Cambio standard input/output
+				char *lastArgument = (char*)malloc(20 * sizeof(char));
+				findLastArgument(args,lastArgument);
+				int changeStdIOResult;
 
-        if (flags[APPEND]){
-          if((changeStdIOResult = changeStdIO(lastArgument,"a",stdout)) == -1)
-            exit(EXIT_FAILURE);
-        }
-        if (flags[OUTP]){
-          if((changeStdIOResult = changeStdIO(lastArgument,"w",stdout)) == -1)
-            exit(EXIT_FAILURE);
-        }
-        if (flags[INPT]){
-          if((changeStdIOResult = changeStdIO(lastArgument,"r+",stdin)) == -1)
-            exit(EXIT_FAILURE);
-        }
-        free(lastArgument);
-      }
+				if (flags[APPEND]){
+					if((changeStdIOResult = changeStdIO(lastArgument,"a",stdout)) == -1)
+						exit(EXIT_FAILURE);
+				}
+				if (flags[OUTP]){
+					if((changeStdIOResult = changeStdIO(lastArgument,"w",stdout)) == -1)
+					exit(EXIT_FAILURE);
+				}
+				if (flags[INPT]){
+					if((changeStdIOResult = changeStdIO(lastArgument,"r+",stdin)) == -1)
+					exit(EXIT_FAILURE);
+				}
+				free(lastArgument);
+			}
 
+			execvp2(inst1);	
 
+			break;
 
-	    execvp2(inst1);
-	
+		case -1:
+			// Error forking
+			perror("Baash error forking");
+			break;
 
-	  	break;
-
-  	case -1:
-    // Error forking
-	    perror("Baash error forking");
-	    break;
-
-    
-    default:
-    // Parent process
-  		if(flags[AMP] == 0){
-  			if(flags[PIPE]){
-	  			close(file_desc[0]);
-		        close(file_desc[1]);
-		        wait(0);
-		        wait(0);
-		    }
-		    else{
-		    	wait(0);
-		    }
-		    // do {
-		    //   wpid = waitpid(pid, &status, WUNTRACED);
-		    // } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-
-	      // if(wpid == -1){
-	      //   perror("Child process returned -1");
-	      //   exit(EXIT_FAILURE);
-	      // }
-		}
+		default:
+			// Parent process
+			if(flags[AMP] == 0){
+				if(flags[PIPE]){
+					close(file_desc[0]);
+					close(file_desc[1]);
+					wait(0);
+					wait(0);
+				}
+				else{
+					wait(0);
+				}
+			}
 	}
-	
+
 	return 1;
 }
 
@@ -141,13 +128,13 @@ int launch(char **args)
   */
 
 int changeStdIO(char* lastArgument, const char* mode, FILE *stream){
-    	FILE *fp;
-    	fp = freopen(lastArgument,mode,stream);
-    	if(fp == NULL)
-    		return -1;
-    	else
-    		return 0;
-    }
+	FILE *fp;
+	fp = freopen(lastArgument,mode,stream);
+	if(fp == NULL)
+		return -1;
+	else
+		return 0;
+}
 
 
   /**
@@ -160,11 +147,11 @@ int changeStdIO(char* lastArgument, const char* mode, FILE *stream){
   * @param lastArgument el puntero a char donde se copiara el elemento encontrado.
   */
 void findLastArgument(char **args,char *lastArgument){
-  int i = 0 ;
-  while(args[i] != NULL){
-    i++;
-  }
-  strcpy(lastArgument,args[i-1]);
+	int i = 0 ;
+	while(args[i] != NULL){
+		i++;
+	}
+	strcpy(lastArgument,args[i-1]);
 }
 
   /**
@@ -181,7 +168,8 @@ int isRelative(char** path){
 	if(strstr(*path,"/")==NULL){
 		return 1;
 	}
-	return 0;
+	else
+		return 0;
 }
 
   /**
@@ -195,10 +183,11 @@ int isRelative(char** path){
   * @return 0 si el comando pudo ser ejecutado, -1 si no se encontro en el path provisto.
   */
 int runCommand(char **args, char *path){
-  	if (execv(path, args) == -1) {
-    	return -1;
-  	}
-    return 0;
+	if (execv(path, args) == -1) {
+		return -1;
+	}
+	else
+		return 0;
 }
 
 
@@ -214,9 +203,10 @@ int runCommand(char **args, char *path){
   */
 int checkFlag(const char* ch, char* word){
 	if(strcmp(ch,word)==0){
-  		return 0;
-  	}
-  	return -1;
+		return 0;
+	}
+	else
+		return -1;
 }
 
 
@@ -303,29 +293,29 @@ void crearNieto(int file_desc[], char** inst2){
   * @param args La instruccion a ejecutar.
   */
 void execvp2(char** args){
-	  	if (isRelative(args)){
-	  		char new_str[100] = "";
-	  		int i = 0;
-	  		while (path[i] != NULL){
-	  			strcat(new_str,path[i]);
-				strcat(new_str,"/");
-				strcat(new_str, args[0]);
-				runCommand(args,new_str);
+	if (isRelative(args)){
+		char new_str[100] = "";
+		int i = 0;
+		while (path[i] != NULL){
+			strcat(new_str,path[i]);
+			strcat(new_str,"/");
+			strcat(new_str, args[0]);
+			runCommand(args,new_str);
 
-	  			//limpio el string para probar de nuevo
-	  			new_str[0] = 0;
-	  			i++;
-	  		}
-	  		//Si no se encontro el comando imprimo el error
-	  		perror("Baash error executing command");
-	  		exit(EXIT_FAILURE);
-	  	}
+			//limpio el string para probar de nuevo
+			new_str[0] = 0;
+			i++;
+		}
+		//Si no se encontro el comando imprimo el error
+		perror("Baash error executing command");
+		exit(EXIT_FAILURE);
+	}
 
-	  	else if(runCommand(args,args[0]) == -1){
-	  		//Si retorna es porque hubo un error
-			perror("Baash error executing command");
-		    exit(EXIT_FAILURE);
-	  	}
+	else if(runCommand(args,args[0]) == -1){
+		//Si retorna es porque hubo un error
+		perror("Baash error executing command");
+		exit(EXIT_FAILURE);
+	}
 }
 
 /**
@@ -339,20 +329,20 @@ void execvp2(char** args){
   * @return cabt_flags La cantidad de flags encontrados. Deberia ser 1 para un comando correcto.
   */
 int countFlags(char **args,int *flag_index){
-  int cant_flags = 0;
-  int i=0;
-  //cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
-  while(args[i]!=NULL){
-    for(int j=0; j<TOTAL_FLAGS; j++){
-      if(checkFlag(caracter[j],args[i])==0){
-        flags[j]++;
-        cant_flags++;
-        *flag_index = i;
-      }
-  }
-    i++;
-    if(args[i]==NULL && cant_flags ==0)
-      *flag_index=i;
-  }
-  return cant_flags;
+	int cant_flags = 0;
+	int i=0;
+	//cuenta la cantidad de flags, cuenta cada uno por separado, y guarda el indice del mismo
+	while(args[i]!=NULL){
+		for(int j=0; j<TOTAL_FLAGS; j++){
+			if(checkFlag(caracter[j],args[i])==0){
+				flags[j]++;
+				cant_flags++;
+				*flag_index = i;
+			}
+		}
+	i++;
+	if(args[i]==NULL && cant_flags ==0)
+		*flag_index=i;
+	}
+	return cant_flags;
 }
